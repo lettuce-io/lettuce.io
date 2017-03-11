@@ -1,0 +1,27 @@
+// Compass
+@import "compass";
+
+// Google Fonts
+@import url('https://fonts.googleapis.com/css?family=Montserrat:300|Raleway');
+// Main colors
+$primary: #6db33f;
+$text-color: #34302d;
+$background: #34302d;
+
+// Duration effect
+$hover-transition-duration: 0.2s;
+
+// Fonts
+$header-font: 'Raleway', sans-serif;
+$body-font: 'Montserrat', sans-serif;
+
+// Font Awesome
+@import 'font-awesome/font-awesome.scss';
+
+// Imports
+@import 'normalize';
+@import "main";
+@import "nav";
+@import "responsive";
+@import "button";
+

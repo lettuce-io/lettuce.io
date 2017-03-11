@@ -8,3 +8,8 @@ tmp
 build
 classes
 .sass-cache
+*.rdb
+*.aof
+*.jar
+*.pid
+*.log

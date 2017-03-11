@@ -1,57 +1,21 @@
 ---
+name: lettuce-3
+groupId: biz.paluch.redis
+artifactId: lettuce
+branch: 3
+ga: Final
+milestone: Beta
+---
+name: lettuce-4
+groupId: biz.paluch.redis
+artifactId: lettuce
+branch: 4
+ga: Final
+milestone: Beta
+---
 name: core
-groupId: io.projectreactor
-artifactId: reactor-core
-versions:
-  - 3.0.5.RELEASE
-  - 3.0.4.RELEASE
-  - 3.0.3.RELEASE
-  - 3.0.6.BUILD-SNAPSHOT
-  - 3.0.5.BUILD-SNAPSHOT
----
-name: test
-groupId: io.projectreactor.addons
-artifactId: reactor-test
-versions:
-  - 3.0.5.RELEASE
-  - 3.0.4.RELEASE
-  - 3.0.3.RELEASE
-  - 3.0.6.BUILD-SNAPSHOT
-  - 3.0.5.BUILD-SNAPSHOT
----
-name: adapter
-groupId: io.projectreactor.addons
-artifactId: reactor-adapter
-versions:
-  - 3.0.5.RELEASE
-  - 3.0.4.RELEASE
-  - 3.0.3.RELEASE
-  - 3.0.6.BUILD-SNAPSHOT
-  - 3.0.5.BUILD-SNAPSHOT
----
-name: netty
-groupId: io.projectreactor.ipc
-artifactId: reactor-netty
-versions:
-#  - 0.6.1.RELEASE
-  - 0.6.0.RELEASE
-  - 0.5.2.RELEASE
-#  - 0.6.2.BUILD-SNAPSHOT
-  - 0.6.1.BUILD-SNAPSHOT
----
-name: ipc
-groupId: io.projectreactor.ipc
-artifactId: reactor-ipc
-versions:
-#  - 0.6.1.RELEASE
-  - 0.6.0.RELEASE
-  - 0.5.1.RELEASE
-#  - 0.6.2.BUILD-SNAPSHOT
-  - 0.6.1.BUILD-SNAPSHOT
----
-name: kafka
-groupId: io.projectreactor.kafka
-artifactId: reactor-kafka
-versions:
-  - 1.0.0.M1
-  - 1.0.0.BUILD-SNAPSHOT
+groupId: io.lettuce
+artifactId: lettuce-core
+branch: 5
+ga: RELEASE
+milestone: M,RC

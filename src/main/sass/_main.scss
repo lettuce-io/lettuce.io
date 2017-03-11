@@ -1,43 +1,28 @@
-/*
- * Copyright (c) 2011-2017 Pivotal Software Inc, All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 // General styles
 
 a {
-  color: $reactorPrimary;
+  color: $primary;
   text-decoration: none;
   &:hover { text-decoration: underline; }
 }
 
-h1, h2, h3, h4 { font-family: $reactorFontSpecial }
+h1, h2, h3, h4 { font-family: $header-font
+}
 
 ::-moz-selection {
-  background: $reactorPrimary;
+  background: $primary;
   color: white;
   text-shadow: 0 0 0 white;
 }
 ::selection {
-  background: $reactorPrimary;
+  background: $primary;
   color: white;
   text-shadow: 0 0 0 white;
 }
 
 span.version {
   display: inline;
-  background: $reactorTextColor;
+  background: $primary;
   color: white;
   border-radius: 3px;
   font-size: 11px;
@@ -45,20 +30,25 @@ span.version {
   font-weight: bold;
   padding: 2Px 4px 2px;
   line-height: 14px;
-  &.releasetrain {
-    background: $reactorPrimary;
-    &.hold {
-      background: darkorange;
-    }
+
+  &.deprecated {
+    background: $text-color;
+  }
+
+  &.milestone {
+    background: #ffffff;
+    color: $primary;
+    border: 1px solid $primary;
   }
 }
+
 
 // Application
 
 body {
-  font: normal 16px/1.5em $reactorFontMain;
+  font: 300 16px/1.5em $body-font;
   background-color: #f1f1f1;
-  color: $reactorTextColor;
+  color: $text-color;
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased
@@ -74,8 +64,8 @@ body {
 // Header
 
 #header {
-  border-top: 4px solid $reactorPrimary;
-  background: $reactorBackgroundLight;
+  border-top: 4px solid $primary;
+  background: $background;
   .heading {
     @extend .container;
     @include clearfix();
@@ -89,10 +79,10 @@ body {
     float: left;
     a {
       display: block;
-      background: url(../img/logo-2x.png) no-repeat 0 0;
-      height: 40px;
+      background: url(../img/lettuce-2x.png) no-repeat 0 0;
+      height: 53px;
       width: 253px;
-      background-size: 253px 80px;
+      background-size: 215px 107px;
       text-indent: -6000em;
       margin: 8px 0;
       &:hover {
@@ -100,23 +90,21 @@ body {
           @include opacity(1);
         }
       }
-      strong {
+      strong{
         display: block;
-        background: url(../img/logo-2x.png) no-repeat 0 -40px;
-        background-size: 253px 80px;
-        height: 40px;
-        width: 253px;
-        text-indent: -6000em;
+        background: url(../img/lettuce-2x.png) no-repeat 0 -53px;
+        background-size: 215px 107px;
         margin: 8px 0;
+        line-height: 76px;
         @include transition-property(opacity);
-        @include transition-duration($reactorDurationTransition);
+        @include transition-duration($hover-transition-duration);
         @include opacity(0);
       }
     }
   }
   #nav, #nav ul {
     display: block;
-    font-family: $reactorFontSpecial;
+    font-family: $header-font;
     margin: 0;
     padding: 0;
   }
@@ -142,20 +130,20 @@ body {
         display: block;
         text-transform: uppercase;
         font-size: 0.9em;
-        line-height: 71px;
+        line-height: 76px;
         margin: 0;
         padding: 0 12px;
         @include transition-property(background-color);
-        @include transition-duration($reactorDurationTransition);
+        @include transition-duration($hover-transition-duration);
         &:hover {
-          background: $reactorPrimary;
+          background: $primary;
         }
       }
       &:last-child {
         border: 0 none;
       }
       &.active {
-        background: $reactorPrimary;
+        background: $primary;
       }
     }
   }
@@ -165,7 +153,7 @@ body {
 
 #footer {
   text-align: left;
-  background-color: $reactorBackgroundLight;
+  background-color: $background;
   color: white;
   .footer-content {
     background: #423e3c;
@@ -212,7 +200,7 @@ body {
       &.heading {
         font-weight: bold;
         text-transform: uppercase;
-        color: $reactorPrimary;
+        color: $primary;
       }
     }
   }
@@ -226,19 +214,19 @@ section#welcome {
   text-align: left;
   font-size: 1.2em;
   height: 360px;
-  font-family: $reactorFontSpecial;
-  background: #e5e2b6 url('../img/homepage-bg.jpg') no-repeat center 0;
+  background: #e5e2b6 url('../img/keyvisual.jpg') no-repeat center 35%;
+
   article {
     color: white;
     text-align: center;
-    span.logo-reactor {
+    span.logo-lettuce {
       display: block;
       margin-top: 80px;
       margin-bottom: 60px;
     }
     h1 {
       color: white;
-      font: normal 1.8em/0.7em $reactorFontSpecial;
+      font: normal 1.8em/0.7em $header-font;
       strong {
         display: inline;
         font-weight: normal;
@@ -271,7 +259,6 @@ section#welcome {
 section#applications {
   //@extend .container;
   padding: 1.5em 1em 1em;
-  font-family: $reactorFontSpecial3;
   //margin: 0 -1.5em;
 
   article {
@@ -289,16 +276,15 @@ section#applications {
       font-weight: bold;
       font-size: 11px;
     }
-    div.title, div.github, div.javadoc, div.reference {
+    div.title, div.download, div.javadoc, div.reference {
       float: left;
     }
     div.title {
-      width: 40%;
+      width: 35%;
 
       h1 {
         font-size: 1.5em;
-        color: $reactorTextColor;
-        font-family: $reactorFontSpecial3;
+        color: $text-color;
         font-weight: bold;
         margin: 0;
       }
@@ -311,16 +297,16 @@ section#applications {
       line-height: 20px;
       padding: 3px 0;
     }
-    div.github, div.npm, div.nuget {
+    div.github {
       float: left;
-      width: 20%;
+      width: 15%;
       a {
         text-align: center;
         display: block;
         width: 100px;
         padding: 5px 0;
         margin: 0 auto;
-        color: $reactorTextColor;
+        color: $text-color;
         span.fa {
           display: block;
           text-align: center;
@@ -328,158 +314,47 @@ section#applications {
         }
         &:hover {
           text-decoration: none;
-          color: $reactorPrimary;
+          color: $primary;
         }
       }
     }
-    div.javadoc {
-      width: 20%;
+    div.download {
+      width: 15%;
       text-align: center;
-      padding-top:5px;
+      padding-top: 5px;
+    }
+    div.javadoc {
+      width: 15%;
+      text-align: center;
+      padding-top: 5px;
     }
     div.reference {
-      width: 20%;
+      width: 15%;
       text-align: center;
-      padding-top:5px;
+      padding-top: 5px;
     }
   }
 
-  /*.row {
-    @include clearfix();
-    padding: 10px 0 0px;
-    article {
-      width: 20%;
-      float: left;
-      text-align: center;
-      div {
-        border: 1px solid #CCC;
-        margin: 10px;
-        padding: 40px 0 30px;
-        position: relative;
-        overflow: hidden;
-        height: 280px;
-        background-color: #F1F1F1;
-        &:after {
-          //content: "\f1e0";
-          font-family: FontAwesome;
-          font-weight: normal;
-          text-decoration: inherit;
-          position: absolute;
-          font-size: 200px;
-          color: #e8e8e8;
-          bottom: 40px;
-          right: -40px;
-          z-index: 1;
-          @include transition-property(color);
-          @include transition-duration($reactorDurationTransition);
-        }
-        @include transition-property(background-color);
-        @include transition-duration($reactorDurationTransition);
-        &:hover {
-          background: white;
-          &:after { color: #F1F1F1; }
-        }
-        &.share-alt {
-          &:after { content: "\f1e0"; }
-        }
-        &.puzzle-piece {
-          &:after { content: "\f12e"; }
-        }
-        &.sliders {
-          &:after { content: "\f1de"; }
-        }
-        &.reactor {
-          background-image: url('../img/reactor-bg.png');
-          background-repeat: no-repeat;
-          background-position: right bottom;
-          background-size: 146px 139px;
-          .logo-reactor {
-            background: url('../img/logo-dark.png') no-repeat center 0;
-            width: 28px;
-            height: 26px;
-            background-size: 28px 26px;
-
-          }
-        }
-        &.plus {
-          &:after { content: "\f067"; }
-        }
-      }
-      &:first-child {
-        div { margin-left: 0;}
-      }
-      &:last-child {
-        div { margin-right: 0;}
-      }
-
-      span.version {
-        position: absolute;
-        top: 5px;
-        right: 5px;
-        height: auto;
-      }
-      span.releasetrain {
-        position: absolute;
-        top: 5px;
-        left: 5px;
-        height: auto;
-        display: inline;
-        background: $reactorPrimary;
-        color: white;
-        border-radius: 3px;
-        font-size: 10px;
-        font-weight: bold;
-        padding: 1Px 4px 2px;
-        line-height: 14px;
-        a {
-          color: white;
-          cursor: inherit;
-        }
-      }
-      span.icon {
-        font-size: 2em;
-        margin-bottom: 8px;
-        display: block;
-        height: 35px;
-      }
-      h1 {
-        position: relative;
-        font-size: 1.2em;
-        margin: 0;
-        padding: 0 0 0.4em;
-        font-family: $reactorFontSpecial;
-        z-index: 2;
-      }
-      p {
-        margin: 0;
-        padding: 0 1em 0.7em 1em;
-        z-index: 2;
-        font-size: 0.8em;
-        position: relative;
-        &.github {
-          padding: 0.7em 1em 0.2em 1em;
-          font-size: 0.8em;
-          a {
-            cursor: pointer;
-            font-family: $reactorFontSpecial;
-          }
-        }
-      }
-      a {
-        z-index: 2;
-        position: relative;
-      }
-    }
-  }*/
 }
 
-span.logo-reactor {
+span.logo-lettuce {
   display: block;
   margin: 0 auto;
-  width: 100px;
-  height: 100px;
-  background: url('../img/reactor.png') no-repeat 0 0;
-  background-size: 100px 100px;
+  width: 110px;
+  height: 110px;
+  background: url('../img/lettuce-white-text-4x.png') no-repeat 5px 0;
+  background-size: 431px 110px;
+  opacity: 1;
+}
+
+span.logo-java8 {
+  display: block;
+  margin: 0 auto;
+  width: 110px;
+  height: 110px;
+  background: url('../img/java8.png') no-repeat 0 0;
+  opacity: 1;
+  background-size: 110px 110px;
 }
 
 span.logo-io {
@@ -491,29 +366,22 @@ span.logo-io {
   background-size: 132px 100px;
 }
 
-
-span.logo-stream {
+span.logo-lettuce-transparent, span.logo-lettuce-head-transparent {
   display: block;
   margin: 0 auto;
-  width: 100px;
-  height: 100px;
-  background: url('../img/stream.png') no-repeat 0 0;
-  background-size: 100px 100px;
+  background: url('../img/lettuce-white-text-4x.png') no-repeat 0 0;
+  opacity: 0.7;
 }
 
-span.logo-reactor {
-  display: block;
-  margin: 0 auto;
-  width: 100px;
-  height: 100px;
-  background: url('../img/reactor.png') no-repeat 0 0;
-  background-size: 100px 100px;
+span.logo-lettuce-head-transparent {
+  width: 213px;
+  height: 225px;
+  background-size: 863px 213px;
 }
 
 section#key-features {
   article {
     border-top: 1px solid #CCC;
-    font-family: $reactorFontSpecial3;
     font-weight: 400;
     font-size: 16px;
     line-height: 28px;
@@ -529,7 +397,7 @@ section#key-features {
       position: relative;
     }
     h1 {
-      font-family: $reactorFontSpecial;
+      font-family: $header-font;
       font-size: 30px;
       line-height: 30px;
       font-weight: 400;
@@ -540,33 +408,49 @@ section#key-features {
       right: 10px;
 
     }
-    &.turbo-message-passing {
+    &.clustering {
       div {
         background: url('../img/turbomessage-bg.jpg') no-repeat right 20px;
         background-size: 446px 353px;
       }
       span.icon {
         display: block;
-        width: 166px;
-        height: 166px;
+        width: 202px;
+        height: 100px;
+        top: 100px;
         right: 100px;
-        background: url('../img/clock.png') no-repeat right center;
-        background-size: 166px 166px;
+        background: url('../img/cluster.png') no-repeat right center;
+        background-size: 202px 100px;
       }
 
     }
-    &.friendly-adoption {
+    &.dynamic-api {
       background: white;
       div {
         padding-right: 20px;
         padding-left: 350px;
         text-align: right;
-        background: white url('../img/friendlyadoption-bg.jpg') no-repeat left center;
-        background-size: 360px 385px;
+        background: url('../img/module.png') no-repeat 80px center;
+        background-size: 128px 128px;
       }
-      //background: #ebf1e7;
     }
-    &.use-reactor {
+    &.cloud-ready {
+      div {
+        background: url('../img/cloud-ready-bg.jpg') no-repeat right center;
+        background-size: 520px 309px;
+      }
+
+      span.icon {
+        display: block;
+        width: 170px;
+        height: 170px;
+        top: 40px;
+        right: 40px;
+        background: url('../img/cloud-ready.png') no-repeat right center;
+        background-size: 170px 170px;
+      }
+    }
+    &.use-lettuce {
       background-color: white;
       padding: 2em 0;
       div {
@@ -591,29 +475,12 @@ section#key-features {
         }
       }
     }
-    &.guardian-of-the-latency {
-      div {
-        background: url('../img/guardian-bg.jpg') no-repeat right center;
-        background-size: 520px 309px;
-      }
-
-      span.icon {
-        display: block;
-        width: 216px;
-        height: 140px;
-        right: 40px;
-        background: url('../img/cloudfoundry.png') no-repeat right center;
-        background-size: 216px 140px;
-      }
-
-    }
   }
 }
 
 section#brands {
-  background: $reactorPrimary;
+  background: $primary;
   color: white;
-  font-family: $reactorFontSpecial3;
   padding: 3.5em 0 5em;
   div.row {
     @extend .container;
@@ -636,7 +503,7 @@ section#brands {
     }
     h1 {
       text-transform: uppercase;
-      font-family: $reactorFontSpecial;
+      font-family: $header-font;
       font-weight: 400;
       line-height: 20px;
       font-size: 25px;
@@ -661,7 +528,7 @@ section.page404 {
     font-size: 20px;
     font-weight: normal;
     text-align: center;
-    font-family: $reactorFontSpecial;
+    font-family: $header-font;
   }
   ul {
     margin: 0;
@@ -691,24 +558,22 @@ section.page404 {
       max-width: 700px;
       margin: 0;
       font-size: 1.5em;
-      color: $reactorTextColor;
-      font-family: $reactorFontSpecial;
+      color: $text-color;
       font-weight:bold;
       a.link-github {
-        color: $reactorTextColor;
+        color: $text-color;
         margin-left: 10px;
         span.fa {
           font-size:  26px;
         }
         &:hover {
           text-decoration: none;
-          color: $reactorPrimary;
+          color: $primary;
         }
       }
     }
     div.details {
       max-width: 700px;
-      font-family: $reactorFontSpecial3;
       padding: 0.4em 0 0 0;
     }
   }
@@ -718,13 +583,12 @@ section.page404 {
   .project-content {
     padding: 0 2em;
     p, ul {
-      font-family: $reactorFontSpecial3;
       font-size: 0.9em;
     }
   }
   h1 {
     font-size: 1.2em;
-    color: $reactorTextColor;
+    color: $text-color;
   }
   .project-row {
     padding: 1.5em 0 3em;
@@ -742,12 +606,11 @@ section.page404 {
 }
 
 div.panel {
-  border: 1px solid $reactorTextColor;
+  border: 1px solid $text-color;
   font-size: 0.9rem;
-  font-family: $reactorFontSpecial3;
   background-color: #f5f5f5;
   .panel-title {
-    border-bottom: 1px solid $reactorTextColor;
+    border-bottom: 1px solid $text-color;
     padding: 1em 1em;
     font-weight:bold;
   }
@@ -763,7 +626,6 @@ div.panel {
 }
 
 table.table-2 {
-  font-family: $reactorFontSpecial3;
   width: 100%;
   margin: 0;
   border: 0 none;

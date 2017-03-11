@@ -993,12 +993,12 @@
     overflow: hidden;
     font: 12px Helvetica, arial, nimbussansl, liberationsans, freesans, clean, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol";
     color: #b1bac0;
-    background-color: $reactorTextColor;
+    background-color: $text-color;
   }
 
   .gist .gist-meta a {
     font-weight: bold;
-    color: $reactorPrimary;
+    color: $primary;
     text-decoration: none;
     border: 0
   }
@@ -1018,7 +1018,7 @@
     font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
     border-radius: 3px;
     border: 0 none;
-    
+
   }
 
   .gist .gist-file article {

@@ -1,8 +1,7 @@
-# Project Reactor Website
+# Lettuce Website
 
-This is the source code for the Project Reactor home page. It also serves as an example
-application of how to use Spring Web Reactive Framework, Reactor, and other web
-technologies in a single project.
+This is the source code for the Lettuce home page. It uses Project Reactor and Lettuce
+to provide its functionality and requires a running Redis instance on Port `6379`
 
 You can launch the application with by running:
 
@@ -22,4 +21,4 @@ Make sure you have at least IntelliJ IDEA 2016.2.5 and Kotlin plugin 1.1-M02 to 
 configure the EAP update site in:
 Tools -> Kotlin -> Configure Kotlin Plugin Updates -> Early Access Preview 1.1
 
-This project is Apache 2.0 licensed, just like the rest of Reactor.
+This project is Apache 2.0 licensed, just like the rest of Lettuce.

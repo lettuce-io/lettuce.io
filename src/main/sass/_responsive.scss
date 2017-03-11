@@ -19,31 +19,25 @@
   .mobile-only {
     display: block;
   }
-
-
 }
 
 @mixin mobile-sm {
   .mobile-only {
     display: block;
   }
-
-  
 }
-
 
 @media (max-width: 800px) {
 
   section#welcome {
+    padding: 1.2em 0 3em;
     height: 180px;
-    background: #e5e2b6 url('../img/homepage-bg.jpg') no-repeat center -100px;
+    background: #e5e2b6 url('../img/keyvisual.jpg') no-repeat center 35%;
+    background-size: 110%;
     article {
-      span.logo-reactor {
-        display: none;
-      }
       h1 {
-        margin-top: 50px;
-        font-size: 26px;
+        margin-top: 20px;
+        font-size: 22px;
       }
       p {
         display: block;
@@ -61,6 +55,12 @@
           display: none;
         }
       }
+    }
+
+    span.logo-lettuce-head-transparent {
+      width: 103px;
+      height: 107px;
+      background-size: 431px 107px;
     }
   }
 
@@ -80,15 +80,17 @@
     }
     h1#logo {
       margin: 0 auto;
-      width: 253px;
+      width: 180px;
       float: none;
       a {
-        background: url(../img/logo-2x.png) no-repeat 0 0;
-        height: 32px;
-        width: 202px;
-        background-size: 202px 64px;
+        background: url(../img/lettuce-2x.png) no-repeat 0 0;
+        height: 37px;
+        width: 180px;
+        background-size: 180px 84px;
         &:hover {
-          strong {display: none;}
+          strong {
+            display: none;
+          }
         }
       }
       strong {
@@ -111,7 +113,7 @@
       }
     }
   }
-  section#key-features article.friendly-adoption div {
+  section#key-features article.dynamic-api div {
     text-align: left;
     padding-right: 20px;
     padding-left: 20px;
@@ -142,12 +144,11 @@
 
 @media (max-width: 600px) {
   section#welcome {
+    padding: 1.2em 0 3em;
     height: 180px;
-    background: #e5e2b6 url('../img/homepage-bg.jpg') no-repeat center -100px;
+    background: #e5e2b6 url('../img/keyvisual.jpg') no-repeat center 95%;
+    background-size: 120%;
     article {
-      span.logo-reactor {
-        display: none;
-      }
       h1 {
         font-size: 16px;
         line-height: 25px;
@@ -198,7 +199,7 @@
       margin-bottom: 0;
     }
     span.icon {
-      margin-bottom: 15Px;
+      margin-bottom: 15px;
     }
   }
 
@@ -241,7 +242,7 @@
         }
       }
 
-      div.github, div.npm, div.nuget, div.javadoc, div.reference {
+      div.action, div.javadoc, div.reference {
         width: 100%;
         float: none;
         padding: 10px 0;

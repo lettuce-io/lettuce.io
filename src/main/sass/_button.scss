@@ -12,8 +12,8 @@ $font-size-base: 15px;
 $line-height: 15px;
 
 $btn-primary-color: #fff !default;
-$btn-primary-bg: $reactorPrimary;
-$btn-primary-border: $reactorPrimary;
+$btn-primary-bg: $primary;
+$btn-primary-border: $primary;
 
 @mixin hover {
   &:hover { @content }
