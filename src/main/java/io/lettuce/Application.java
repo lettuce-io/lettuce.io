@@ -47,16 +47,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
-import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
@@ -68,6 +60,7 @@ import javax.xml.bind.JAXB;
 import org.reactivestreams.Publisher;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.StreamUtils;
+import org.springframework.util.StringUtils;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
@@ -86,34 +79,34 @@ public final class Application {
 	private final Mono<? extends NettyContext> context;
 	private final MimetypesFileTypeMap fileTypeMap = new MimetypesFileTypeMap();
 	private final byte[] piwikCode;
+	private final String versionsPageContent;
+	private final String versionContent;
 
 	Application() throws IOException {
 
-		context = server.newRouter(
-				r -> r.file("/favicon.ico", contentPath.resolve("favicon.ico"))
-						.file("/KEYS", contentPath.resolve("KEYS"))
-						.get("/docs", rewrite("/docs", "/docs/"))
-						.get("/docs/{module}/{version}/reference", rewrite("/reference", "/reference/index.html"))
-						.get("/docs/{module}/{version}/api", rewrite("/api", "/api/index.html"))
-						.get("/docs/{module}/{version}/download", rewrite("/download", "/download/"))
-						.get("/docs/{module}/release/api/**", this::repoProxy) //
-						.get("/docs/{module}/release/reference/**", this::repoProxy)
-						.get("/docs/{module}/release/download/**", this::downloadRedirect)
-						.get("/docs/{module}/milestone/api/**", this::repoProxy) //
-						.get("/docs/{module}/milestone/reference/**", this::repoProxy)
-						.get("/docs/{module}/milestone/download/**", this::downloadRedirect)
-						.get("/docs/{module}/snapshot/api/**", this::repoProxy) //
-						.get("/docs/{module}/snapshot/reference/**", this::repoProxy)
-						.get("/docs/{module}/snapshot/download/", this::downloadRedirect)
-						.get("/docs/{module}/{version}/api/**", this::repoProxy) //
-						.get("/docs/{module}/{version}/reference/**", this::repoProxy)
-						.get("/docs/{module}/{version}/download/", this::downloadRedirect)
-						.index((req, res) -> res.header(HttpHeaderNames.CONTENT_TYPE, "text/html")
-								.sendFile(contentPath.resolve(res.path()).resolve("index.html")))
-						.get("/docs/",
-								(req, res) -> res.header(HttpHeaderNames.CONTENT_TYPE, "text/html")
-										.sendFile(contentPath.resolve(res.path()).resolve("/docs/index.html")))
-						.get("/assets/**", this::assets));
+		context = server.newRouter(r -> r.file("/favicon.ico", contentPath.resolve("favicon.ico"))
+				.file("/KEYS", contentPath.resolve("KEYS")).get("/docs", rewrite("/docs", "/docs/"))
+				.get("/{module}/{version}/reference", rewrite("/reference", "/reference/index.html"))
+				.get("/{module}/{version}/api", rewrite("/api", "/api/index.html"))
+				.get("/{module}/{version}/download", rewrite("/download", "/download/"))
+				.get("/{module}/release/api/**", this::repoProxy) //
+				.get("/{module}/release/reference/**", this::repoProxy)
+				.get("/{module}/release/download/**", this::downloadRedirect) //
+				.get("/{module}/milestone/api/**", this::repoProxy) //
+				.get("/{module}/milestone/reference/**", this::repoProxy)
+				.get("/{module}/milestone/download/**", this::downloadRedirect)
+				.get("/{module}/snapshot/api/**", this::repoProxy) //
+				.get("/{module}/snapshot/reference/**", this::repoProxy)
+				.get("/{module}/snapshot/download/", this::downloadRedirect).get("/{module}/{version}/api/**", this::repoProxy) //
+				.get("/{module}/{version}/reference/**", this::repoProxy)
+				.get("/{module}/{version}/download/", this::downloadRedirect)
+				.get("/docs/",
+						(req, res) -> res.header(HttpHeaderNames.CONTENT_TYPE, "text/html")
+								.sendFile(contentPath.resolve("docs/index.html")))
+				.get("/assets/**", this::assets) //
+				.get("/{module}/", this::versionsPage) //
+				.get("/", (req, res) -> res.header(HttpHeaderNames.CONTENT_TYPE, "text/html")
+						.sendFile(contentPath.resolve("index.html"))));
 
 		Yaml yaml = new Yaml(new Constructor(Module.class));
 		yaml.loadAll(new ClassPathResource("modules.yml").getInputStream()).forEach(o -> {
@@ -136,6 +129,14 @@ public final class Application {
 		redisConnection = redisClient.connect(StringByteCodec.INSTANCE);
 		try (InputStream is = getClass().getResourceAsStream("/piwik.html")) {
 			piwikCode = StreamUtils.copyToByteArray(is);
+		}
+
+		try (InputStream is = getClass().getResourceAsStream("/version.html")) {
+			versionContent = StreamUtils.copyToString(is, StandardCharsets.UTF_8);
+		}
+
+		try (InputStream is = getClass().getResourceAsStream("/versions.html")) {
+			versionsPageContent = StreamUtils.copyToString(is, StandardCharsets.UTF_8);
 		}
 	}
 
@@ -164,7 +165,7 @@ public final class Application {
 		Module module = modules.get(name);
 
 		if (module == null) {
-			return resp.sendNotFound();
+			return send404(resp);
 		}
 
 		boolean isJavadoc = path.contains("/api/") || path.endsWith("/api");
@@ -172,7 +173,7 @@ public final class Application {
 		Versions.Classifier versionType = requestedVersion.getVersionType();
 		boolean pinnedVersion = requestedVersion.isPinnedVersion();
 
-		int requestFileOffset = isJavadoc ? 12 : 18;
+		int requestFileOffset = isJavadoc ? 7 : 13;
 		if (version == null) {
 			requestFileOffset += versionType.name().length() + name.length();
 		} else {
@@ -218,7 +219,7 @@ public final class Application {
 		Module module = modules.get(name);
 
 		if (module == null) {
-			return resp.sendNotFound();
+			return send404(resp);
 		}
 
 		RequestedVersion requestedVersion = new RequestedVersion(version, path, module);
@@ -247,6 +248,43 @@ public final class Application {
 
 					return resp.sendRedirect(downloadUrl).then();
 				});
+	}
+
+	private Publisher<Void> versionsPage(HttpServerRequest req, HttpServerResponse resp) {
+
+		String name = req.param("module");
+
+		Module module = modules.get(name);
+
+		if (module == null) {
+			return send404(resp);
+		}
+
+		Mono<MavenMetadata> releases = mavenMetadata(module, Versions.Classifier.Release);
+
+		return releases.map(meta -> {
+			return Versions.create(meta, module);
+		}).otherwiseIfEmpty(Mono.defer(() -> send404(resp).cast(Versions.class))).map(versions -> {
+
+			List<String> versionElements = versions.stream().map(version -> {
+
+				return versionContent.replaceAll("%branch%", module.getBranch()) //
+						.replaceAll("%version%", version.getVersion()) //
+						.replaceAll("%versionclass%",
+								version.getClassifier() == Versions.Classifier.Release ? "stable" : "milestone")
+						.replaceAll("%versionclassifier%",
+								version.getClassifier() == Versions.Classifier.Release ? "Stable" : version.getClassifier().name()) //
+						.replaceAll("%artifactid%", module.getArtifactId()) //
+						.replaceAll("%moduleid%", module.getName());
+			}).collect(Collectors.toList());
+
+			return StringUtils.arrayToDelimitedString(versionElements.toArray(), "");
+		}).flatMap(s -> {
+
+			String pageContent = versionsPageContent.replaceFirst("%versions%", s).replaceAll("%branch%", module.getBranch());
+
+			return resp.header(HttpHeaderNames.CONTENT_TYPE, "text/html").sendByteArray(Mono.just(pageContent.getBytes()));
+		}).then();
 	}
 
 	private Publisher<Void> assets(HttpServerRequest req, HttpServerResponse resp) {
@@ -340,7 +378,8 @@ public final class Application {
 				module.getArtifactId(), version.getVersion());
 
 		return client.get(url)
-				.flatMap(httpClientResponse -> httpClientResponse.receive().asInputStream().collect(toInputStream()))
+				.flatMap(httpClientResponse -> httpClientResponse.receive().asInputStream()
+						.collect(QueueBackedInputStream.toInputStream()))
 				.map(is -> JAXB.unmarshal(is, MavenMetadata.class).getVersioning().getSnapshot()).next();
 
 	}
@@ -425,172 +464,12 @@ public final class Application {
 				}));
 	}
 
-	private static Collector<InputStream, QueueBackedInputStream, InputStream> toInputStream() {
-
-		return new Collector<InputStream, QueueBackedInputStream, InputStream>() {
-
-			@Override
-			public Supplier<QueueBackedInputStream> supplier() {
-				return () -> new QueueBackedInputStream(new LinkedBlockingQueue<>());
-			}
-
-			@Override
-			public BiConsumer<QueueBackedInputStream, InputStream> accumulator() {
-				return (q, i) -> q.stream.add(i);
-			}
-
-			@Override
-			public BinaryOperator<QueueBackedInputStream> combiner() {
-				return (q1, q2) -> {
-
-					while (!q2.stream.isEmpty()) {
-						q2.stream.drainTo(q1.stream);
-					}
-
-					return q1;
-				};
-			}
-
-			@Override
-			public Function<QueueBackedInputStream, InputStream> finisher() {
-				return q -> {
-					if (!q.stream.isEmpty()) {
-						q.lastStream = q.stream.stream().skip(q.stream.size() - 1).findAny().orElse(null);
-						q.lastElementReceived();
-					}
-
-					return q;
-				};
-			}
-
-			@Override
-			public Set<Characteristics> characteristics() {
-				return Collections.emptySet();
-			}
-		};
-	}
-
 	private String getRepo(Versions.Classifier classifier) {
 		return classifier == Versions.Classifier.Snapshot ? "https://oss.sonatype.org/content/repositories/snapshots"
 				: "https://oss.sonatype.org/content/repositories/releases";
 	}
 
-	static class QueueBackedInputStream extends InputStream {
-
-		final BlockingQueue<InputStream> stream;
-		volatile InputStream lastStream;
-
-		private InputStream current;
-		private volatile boolean closed;
-
-		public QueueBackedInputStream(BlockingQueue<InputStream> stream) {
-			this.stream = stream;
-		}
-
-		@Override
-		public int available() throws IOException {
-
-			if (closed) {
-				return -1;
-			}
-
-			advance();
-
-			return current.available();
-		}
-
-		private void advance() {
-
-			if (lastStream == current || current instanceof LastInputStream) {
-				return;
-			}
-
-			while (current == null) {
-				try {
-					current = stream.take();
-
-					if (current instanceof LastInputStream) {
-						current.close();
-						current = null;
-						return;
-					}
-
-					if (current.available() == -1) {
-						current.close();
-						current = null;
-					}
-				} catch (Exception e) {
-					Thread.currentThread().interrupt();
-					throw new IllegalStateException(e);
-				}
-			}
-		}
-
-		@Override
-		public int read() throws IOException {
-
-			if (closed) {
-				return -1;
-			}
-
-			advance();
-
-			if (current == null) {
-				return -1;
-			}
-
-			return current.read();
-		}
-
-		@Override
-		public int read(byte[] b, int off, int len) throws IOException {
-
-			if (closed) {
-				return -1;
-			}
-
-			advance();
-
-			if (current == null) {
-				return -1;
-			}
-
-			int read = current.read(b, off, len);
-
-			if (read < len) {
-				current.close();
-				current = null;
-			}
-
-			return read;
-		}
-
-		@Override
-		public void close() throws IOException {
-
-			if (current != null) {
-				current.close();
-				current = null;
-			}
-			closed = true;
-		}
-
-		public void lastElementReceived() {
-			stream.add(LastInputStream.INSTANCE);
-		}
-
-		static class LastInputStream extends InputStream {
-
-			static final LastInputStream INSTANCE = new LastInputStream();
-
-			@Override
-			public int read() throws IOException {
-				throw new UnsupportedOperationException();
-			}
-		}
-	}
-
-	private static class RequestedVersion {
+	static class RequestedVersion {
 
 		private Versions.Classifier versionType;
 		private boolean pinnedVersion;
@@ -603,15 +482,21 @@ public final class Application {
 				pinnedVersion = false;
 			} else {
 				pinnedVersion = true;
-				String[] milestones = module.getMilestone().split(",");
-				if (version.contains("-SNAPSHOT")) {
-					versionType = Versions.Classifier.Snapshot;
-				} else if (contains(version, milestones)) {
-					versionType = Versions.Classifier.Milestone;
-				} else {
-					versionType = Versions.Classifier.Release;
-				}
+				getVersionType(version, module);
 			}
+		}
+
+		public static Versions.Classifier getVersionType(String version, Module module) {
+
+			String[] milestones = module.getMilestone().split(",");
+			if (version.contains("-SNAPSHOT")) {
+				return Versions.Classifier.Snapshot;
+			}
+
+			if (contains(version, milestones)) {
+				return Versions.Classifier.Milestone;
+			}
+			return Versions.Classifier.Release;
 		}
 
 		public Versions.Classifier getVersionType() {

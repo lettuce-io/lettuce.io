@@ -1,9 +1,25 @@
 <!DOCTYPE html>
+<!--
+  ~ Copyright 2017 the original author or authors.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
 <html xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Lettuce</title>
+    <title>Lettuce Versions</title>
     <meta name="description" content="">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'/>
@@ -12,7 +28,7 @@
     <meta name="MobileOptimized" content="320">
     <meta http-equiv="cleartype" content="on">
 
-    <link rel="icon" type="image/png" href="favicon.ico"/>
+    <link rel="icon" type="image/png" href="static/favicon.ico"/>
     <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/assets/img/apple-touch-icon-180.png">
     <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/assets/img/apple-touch-icon-152.png">
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/assets/img/apple-touch-icon-144.png">
@@ -28,6 +44,7 @@
     <link rel="icon" sizes="192x192" href="/assets/img/touch/touch-icon-192x192.png">
     <link rel="icon" sizes="128x128" href="/assets/img/touch/touch-icon-128x128.png">
     <link href="/assets/css/lettuce.css?v=1" media="all" rel="stylesheet"/>
+    <link href="/assets/css/docs.css?v=1" media="all" rel="stylesheet"/>
 </head>
 <body>
 
@@ -44,7 +61,7 @@
                     <nav id="nav">
                         <ul>
                             <li class="hide"><a href="/">Home</a></li>
-                            <li><a href="/docs/">Documentation</a></li>
+                            <li class="active"><a href="/docs/">Documentation</a></li>
                             <li><a href="https://github.com/lettuce-io/lettuce-core" class="fa fa-github-alt"
                                    title="Github">&nbsp;</a></li>
                             <li><a href="https://gitter.im/lettuce-io/Lobby" class="fa fa-commenting"
@@ -60,102 +77,22 @@
                     </nav>
                 </div>
             </header>
-            <div class="content" id="content">
-                <section id="welcome">
-                    <article>
-                        <span class="logo-lettuce-head-transparent"></span>
-                        <h1>
-                            <strong>
-                                Build elastic data access
-                            </strong>
-                        </h1>
-                        <p>
-                            <span>Lettuce is a scalable <a href="https://redis.io/">Redis</a> client for building non-blocking Reactive applications</span>
-                        </p>
-                    </article>
-                </section>
-                <section id="brands">
-                    <div class="row">
-                        <article>
-                            <div class="lettuce">
-                                <span class="icon">
-                                    <span class="logo-lettuce"></span>
-                                </span>
-                                <h1>Lettuce</h1>
-                                <p>
-                                    Lettuce is a <strong>fully non-blocking</strong> <a
-                                        href="https://redis.io/">Redis</a> client
-                                    built with <a href="https://netty.io/">netty</a> providing Reactive, Asynchronous
-                                    and Synchronous Data Access .
-                                </p>
-                            </div>
-                        </article>
-                        <article>
-                            <div>
-                                <span class="icon">
-                                    <span class="logo-java8"></span>
-                                </span>
-                                <h1>Java 8 types</h1>
-                                <p>
-                                    Lettuce provides asynchronous API with <a
-                                        href="http://redis.paluch.biz/docs/api/releases/latest-4.x/com/lambdaworks/redis/RedisFuture.html">RedisFuture
-                                    (CompletionStage)</a> and Reactive types <a
-                                        href="https://projectreactor.io/docs/core/release/api/reactor/core/publisher/Flux.html">Flux
-                                    [N]
-                                </a> and <a
-                                        href="https://projectreactor.io/docs/core/release/api/reactor/core/publisher/Mono.html">Mono
-                                    [0|1]</a>.
-                                </p>
-                            </div>
-                        </article>
-                        <article>
-                            <div>
-                                <span class="icon">
-                                    <span class="logo-io"></span>
-                                </span>
-                                <h1>Non blocking I/O</h1>
-                                <p>
-                                    Low-latency communication,
-                                    <strong>backpressure-enabled
-                                        network engine</strong> for NIO TCP, epoll TCP and Unix Domain Sockets.
-                                    Reactive Streaming is fully supported.
-                                </p>
-                            </div>
-                        </article>
+            <div class="page-summary">
+                <div class="page-summary-content">
+                    <div class="page-summary-wrap">
+                        <h1>Lettuce %branch%</h1>
+                        <div class="details">
+                        <span id="author" class="author">Lettuce reference
+                            documentation and Javadoc.</span><br>
+                        </div>
                     </div>
-                </section>
-                <section id="key-features">
-                    <article class="clustering">
-                        <div>
-                            <span class="icon"></span>
-                            <h1>Scale Out</h1>
-                            <p>
-                                Redis Standalone, Master/Slave, Redis Sentinel and Redis Cluster. Lettuce connects
-                                with all operational models natively supported by Redis. Partition-tolerance, Read Slaves
-                                and Transport-Level-Security provide the required foundation for highly scalable applications.
-                            </p>
-                        </div>
-                    </article>
-                    <article class="dynamic-api">
-                        <div>
-                            <h1>Dynamic API</h1>
-                            <p>
-                                Redis Modules drive evolution and demand a client that is able to react to change.
-                                Lettuce's dynamic Redis Commands Interfaces leverage the dynamic module API with
-                                custom API interfaces.
-                            </p>
-                        </div>
-                    </article>
-                    <article class="cloud-ready">
-                        <div>
-                            <span class="icon"></span>
-                            <h1>Cloud Ready</h1>
-                            <p style="margin-bottom: 0">Battle-tested with major Cloud-based Redis services.
-                                Lettuce adopts the specifics of various cloud offerings to seamlessly
-                                integrate for best performance.
-                            </p>
-                        </div>
-                    </article>
+                </div>
+            </div>
+
+            <div id="main" class="book">
+
+                <section id="applications">
+                    %versions%
                 </section>
             </div>
             <footer id="footer">
@@ -205,20 +142,24 @@
 <script src="/assets/js/app.js"></script>
 <!-- Piwik -->
 <script type="text/javascript">
-  var _paq = _paq || [];
-  // tracker methods like "setCustomDimension" should be called before "trackPageView"
-  _paq.push(["setCookieDomain", "*.redis.paluch.biz"]);
-  _paq.push(['trackPageView']);
-  _paq.push(['enableLinkTracking']);
-  (function() {
-    var u="//piwik.paluch.biz/";
-    _paq.push(['setTrackerUrl', u+'piwik.php']);
-    _paq.push(['setSiteId', '6']);
-    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
-  })();
+    var _paq = _paq || [];
+    // tracker methods like "setCustomDimension" should be called before "trackPageView"
+    _paq.push(["setCookieDomain", "*.redis.paluch.biz"]);
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    (function () {
+        var u = "//piwik.paluch.biz/";
+        _paq.push(['setTrackerUrl', u + 'piwik.php']);
+        _paq.push(['setSiteId', '6']);
+        var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+        g.type = 'text/javascript';
+        g.async = true;
+        g.defer = true;
+        g.src = u + 'piwik.js';
+        s.parentNode.insertBefore(g, s);
+    })();
 </script>
-<noscript><p><img src="//piwik.paluch.biz/piwik.php?idsite=6&rec=1" style="border:0;" alt="" /></p></noscript>
+<noscript><p><img src="//piwik.paluch.biz/piwik.php?idsite=6&rec=1" style="border:0;" alt=""/></p></noscript>
 <!-- End Piwik Code -->
 </body>
 </html>

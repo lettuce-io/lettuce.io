@@ -19,10 +19,12 @@ package io.lettuce;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author Mark Paluch
@@ -56,6 +58,25 @@ public class Versions {
 		versions.sort(Comparator.<Version> naturalOrder().reversed());
 
 		return new Versions(versions);
+	}
+
+	public int size() {
+		return versions.size();
+	}
+
+	public Stream<Version> stream() {
+		return versions.stream();
+	}
+
+	public Versions mergeWith(Versions other) {
+
+		List<Version> result = new ArrayList<>(this.versions.size() + other.versions.size());
+		result.addAll(this.versions);
+		result.addAll(other.versions);
+
+		result.sort(Comparator.<Version> naturalOrder().reversed());
+
+		return new Versions(result);
 	}
 
 	public Version getLatest(Classifier versionType) {
