@@ -181,11 +181,10 @@ public final class Application {
 		}
 
 		final int offset = requestFileOffset;
-		Mono<MavenMetadata> mavenMetadata = mavenMetadata(module, versionType);
+		Mono<Versions> versions = getVersionsMono(module, versionType, pinnedVersion);
 
-		return mavenMetadata //
-				.then(meta -> Mono.justOrEmpty(pinnedVersion ? Versions.create(meta, module).getVersion(version)
-						: Versions.create(meta, module).getLatest(versionType))) //
+		return versions //
+				.then(v -> Mono.justOrEmpty(pinnedVersion ? v.getVersion(version) : v.getLatest(versionType))) //
 				.otherwiseIfEmpty(Mono.defer(() -> send404(resp).cast(Versions.Version.class))) //
 				.then(artifactVersion -> {
 
@@ -207,7 +206,8 @@ public final class Application {
 	}
 
 	private Mono<Void> send404(HttpServerResponse resp) {
-		return resp.header(HttpHeaderNames.CONTENT_TYPE, "text/html").sendFile(contentPath.resolve("404.html")).then();
+		return resp.header(HttpHeaderNames.CONTENT_TYPE, "text/html").status(404).sendFile(contentPath.resolve("404.html"))
+				.then();
 	}
 
 	private Publisher<Void> downloadRedirect(HttpServerRequest req, HttpServerResponse resp) {
@@ -226,11 +226,10 @@ public final class Application {
 		Versions.Classifier versionType = requestedVersion.getVersionType();
 		boolean pinnedVersion = requestedVersion.isPinnedVersion();
 
-		Mono<MavenMetadata> mavenMetadata = mavenMetadata(module, versionType);
+		Mono<Versions> versions = getVersionsMono(module, versionType, pinnedVersion);
 
-		return mavenMetadata //
-				.then(meta -> Mono.justOrEmpty(pinnedVersion ? Versions.create(meta, module).getVersion(version)
-						: Versions.create(meta, module).getLatest(versionType))) //
+		return versions //
+				.then(v -> Mono.justOrEmpty(pinnedVersion ? v.getVersion(version) : v.getLatest(versionType))) //
 				.otherwiseIfEmpty(Mono.defer(() -> send404(resp).cast(Versions.Version.class))) //
 				.then(artifactVersion -> {
 
@@ -248,6 +247,22 @@ public final class Application {
 
 					return resp.sendRedirect(downloadUrl).then();
 				});
+	}
+
+	private Mono<Versions> getVersionsMono(Module module, Versions.Classifier versionType, boolean pinnedVersion) {
+		Mono<Versions> versions;
+		if (pinnedVersion) {
+			Mono<Versions> releases = mavenMetadata(module, Versions.Classifier.Release)
+					.map(meta -> Versions.create(meta, module));
+			Mono<Versions> snapshots = mavenMetadata(module, Versions.Classifier.Snapshot)
+					.map(meta -> Versions.create(meta, module));
+
+			versions = Mono.when(releases, snapshots).map(tuple -> tuple.getT1().mergeWith(tuple.getT2()));
+
+		} else {
+			versions = mavenMetadata(module, versionType).map(meta -> Versions.create(meta, module));
+		}
+		return versions;
 	}
 
 	private Publisher<Void> versionsPage(HttpServerRequest req, HttpServerResponse resp) {
@@ -400,6 +415,7 @@ public final class Application {
 
 				String url = String.format("%s/%s/%s/%s/%s", repo, module.getGroupId().replace('.', '/'),
 						module.getArtifactId(), version.getVersion(), s);
+				System.out.println("Downloading from " + url);
 				return client.get(url);
 			}).then(httpClientResponse -> httpClientResponse.receive().asByteArray().collectList().map(this::getBytes));
 		})).then(content -> {

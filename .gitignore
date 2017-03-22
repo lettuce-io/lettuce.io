@@ -10,6 +10,5 @@ classes
 .sass-cache
 *.rdb
 *.aof
-*.jar
 *.pid
 *.log
