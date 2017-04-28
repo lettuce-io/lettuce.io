@@ -22,10 +22,12 @@ import io.lettuce.core.SetArgs;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.http.HttpHeaderNames;
+import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpStatusClass;
 import reactor.core.publisher.Mono;
 import reactor.ipc.netty.NettyContext;
 import reactor.ipc.netty.http.client.HttpClient;
+import reactor.ipc.netty.http.client.HttpClientException;
 import reactor.ipc.netty.http.server.HttpServer;
 import reactor.ipc.netty.http.server.HttpServerRequest;
 import reactor.ipc.netty.http.server.HttpServerResponse;
@@ -184,9 +186,9 @@ public final class Application {
 		Mono<Versions> versions = getVersionsMono(module, versionType, pinnedVersion);
 
 		return versions //
-				.then(v -> Mono.justOrEmpty(pinnedVersion ? v.getVersion(version) : v.getLatest(versionType))) //
-				.otherwiseIfEmpty(Mono.defer(() -> send404(resp).cast(Versions.Version.class))) //
-				.then(artifactVersion -> {
+				.flatMap(v -> Mono.justOrEmpty(pinnedVersion ? v.getVersion(version) : v.getLatest(versionType))) //
+				.switchIfEmpty(Mono.defer(() -> send404(resp).cast(Versions.Version.class))) //
+				.flatMap(artifactVersion -> {
 
 					String file = req.uri().substring(offset);
 					if (file.isEmpty()) {
@@ -194,14 +196,24 @@ public final class Application {
 					}
 					String contentType = fileTypeMap.getContentType(file);
 					return jarEntry(module, artifactVersion, isJavadoc ? "javadoc" : "docs", file).defaultIfEmpty(new byte[0])
-							.then(bytes -> {
+							.flatMap(bytes -> {
 								if (bytes.length == 0) {
 									return send404(resp);
 								}
 
 								return resp.status(200).header(HttpHeaderNames.CONTENT_TYPE, contentType)
 										.send(Mono.just(Unpooled.wrappedBuffer(bytes))).then();
-							});
+							}).onErrorResume(throwable -> {
+
+								if (throwable instanceof HttpClientException) {
+									HttpClientException hce = (HttpClientException) throwable;
+
+									return (hce.status() != null && HttpResponseStatus.NOT_FOUND.equals(hce.status()));
+								}
+
+								return false;
+
+							}, throwable -> send404(resp));
 				});
 	}
 
@@ -229,9 +241,9 @@ public final class Application {
 		Mono<Versions> versions = getVersionsMono(module, versionType, pinnedVersion);
 
 		return versions //
-				.then(v -> Mono.justOrEmpty(pinnedVersion ? v.getVersion(version) : v.getLatest(versionType))) //
-				.otherwiseIfEmpty(Mono.defer(() -> send404(resp).cast(Versions.Version.class))) //
-				.then(artifactVersion -> {
+				.flatMap(v -> Mono.justOrEmpty(pinnedVersion ? v.getVersion(version) : v.getLatest(versionType))) //
+				.switchIfEmpty(Mono.defer(() -> send404(resp).cast(Versions.Version.class))) //
+				.flatMap(artifactVersion -> {
 
 					String downloadUrl;
 					if (artifactVersion.getClassifier() == Versions.Classifier.Release
@@ -279,7 +291,7 @@ public final class Application {
 
 		return releases.map(meta -> {
 			return Versions.create(meta, module);
-		}).otherwiseIfEmpty(Mono.defer(() -> send404(resp).cast(Versions.class))).map(versions -> {
+		}).switchIfEmpty(Mono.defer(() -> send404(resp).cast(Versions.class))).map(versions -> {
 
 			List<String> versionElements = versions.stream().map(version -> {
 
@@ -298,8 +310,9 @@ public final class Application {
 
 			String pageContent = versionsPageContent.replaceFirst("%versions%", s).replaceAll("%branch%", module.getBranch());
 
-			return resp.header(HttpHeaderNames.CONTENT_TYPE, "text/html").sendByteArray(Mono.just(pageContent.getBytes()));
-		}).then();
+			return resp.header(HttpHeaderNames.CONTENT_TYPE, "text/html").sendByteArray(Mono.just(pageContent.getBytes()))
+					.then();
+		});
 	}
 
 	private Publisher<Void> assets(HttpServerRequest req, HttpServerResponse resp) {
@@ -355,20 +368,23 @@ public final class Application {
 
 	Mono<MavenMetadata> mavenMetadata(Module module, Versions.Classifier classifier) {
 
-		String cacheKey = String.format("%s-%s", module.getName(), classifier);
+		String cacheKey = String.format("maven-metadata:%s-%s", module.getName(), classifier);
 		String repo = getRepo(classifier);
 		String url = String.format("%s/%s/%s/maven-metadata.xml", repo, module.getGroupId().replace('.', '/'),
 				module.getArtifactId());
 
-		return withCaching(cacheKey, new SetArgs(),
-				client.get(url, r -> r.failOnClientError(false)).then(httpClientResponse -> {
+		return withCaching(cacheKey, new SetArgs(), client.get(url, r -> {
 
-					if (httpClientResponse.status().codeClass() == HttpStatusClass.SUCCESS) {
-						return httpClientResponse.receive().asByteArray().collectList().map(this::getBytes);
-					}
+			r.failOnClientError(false);
+			return Mono.empty();
+		}).flatMap(httpClientResponse -> {
 
-					return Mono.empty();
-				})).map(bytes -> JAXB.unmarshal(new ByteArrayInputStream(bytes), MavenMetadata.class));
+			if (httpClientResponse.status() != null && httpClientResponse.status().codeClass() == HttpStatusClass.SUCCESS) {
+				return httpClientResponse.receive().asByteArray().collectList().map(this::getBytes);
+			}
+
+			return Mono.empty();
+		})).map(bytes -> JAXB.unmarshal(new ByteArrayInputStream(bytes), MavenMetadata.class));
 	}
 
 	private byte[] getBytes(List<byte[]> bbs) {
@@ -395,13 +411,14 @@ public final class Application {
 		return client.get(url)
 				.flatMap(httpClientResponse -> httpClientResponse.receive().asInputStream()
 						.collect(QueueBackedInputStream.toInputStream()))
-				.map(is -> JAXB.unmarshal(is, MavenMetadata.class).getVersioning().getSnapshot()).next();
+				.map(is -> JAXB.unmarshal(is, MavenMetadata.class).getVersioning().getSnapshot());
 
 	}
 
 	Mono<byte[]> jarEntry(Module module, Versions.Version version, String type, String path) {
 
 		String cacheKey = String.format("%s-%s-%s", module.getName(), version.getVersion(), type);
+		String jarCacheKey = String.format("jar:%s", cacheKey);
 		String repo = getRepo(version.getClassifier());
 
 		SetArgs setArgs = SetArgs.Builder.nx();
@@ -409,16 +426,16 @@ public final class Application {
 			setArgs.ex(TimeUnit.SECONDS.convert(4, TimeUnit.HOURS));
 		}
 
-		Mono<byte[]> contentLoader = withCaching(cacheKey, setArgs, Mono.defer(() -> {
+		Mono<byte[]> contentLoader = withCaching(jarCacheKey, setArgs, Mono.defer(() -> {
 
-			return getFilename(module, version, type).then(s -> {
+			return getFilename(module, version, type).flatMap(s -> {
 
 				String url = String.format("%s/%s/%s/%s/%s", repo, module.getGroupId().replace('.', '/'),
 						module.getArtifactId(), version.getVersion(), s);
 				System.out.println("Downloading from " + url);
 				return client.get(url);
-			}).then(httpClientResponse -> httpClientResponse.receive().asByteArray().collectList().map(this::getBytes));
-		})).then(content -> {
+			}).flatMap(httpClientResponse -> httpClientResponse.receive().asByteArray().collectList().map(this::getBytes));
+		})).flatMap(content -> {
 
 			try (ZipInputStream zis = new ZipInputStream(new ByteArrayInputStream(content))) {
 
@@ -442,7 +459,7 @@ public final class Application {
 			return Mono.empty();
 		});
 
-		return withCaching(String.format("%s:%s", cacheKey, path), setArgs, contentLoader);
+		return withCaching(String.format("file:%s:%s", cacheKey, path), setArgs, contentLoader);
 	}
 
 	private byte[] addTrackingCode(byte[] content) {
@@ -473,10 +490,10 @@ public final class Application {
 	}
 
 	private Mono<byte[]> withCaching(String cacheKey, SetArgs setArgs, Mono<byte[]> cacheLoader) {
-		return redisConnection.reactive().get(cacheKey).otherwise(throwable -> cacheLoader)
-				.otherwiseIfEmpty(cacheLoader.then(value -> {
+		return redisConnection.reactive().get(cacheKey).onErrorResume(throwable -> cacheLoader)
+				.switchIfEmpty(cacheLoader.flatMap(value -> {
 					return redisConnection.reactive().set(cacheKey, value, setArgs).map(ok -> value)
-							.otherwise(throwable -> Mono.justOrEmpty(value));
+							.onErrorResume(throwable -> Mono.justOrEmpty(value));
 				}));
 	}
 

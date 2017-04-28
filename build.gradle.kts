@@ -60,8 +60,8 @@ repositories {
 
 dependencies {
     compile("org.springframework:spring-core:5.0.0.BUILD-SNAPSHOT")
-    compile("io.projectreactor.ipc:reactor-netty:0.6.2.BUILD-SNAPSHOT")
-    compile("io.projectreactor:reactor-core:3.0.5.RELEASE")
+    compile("io.projectreactor.ipc:reactor-netty:0.6.3.BUILD-SNAPSHOT")
+    compile("io.projectreactor:reactor-core:3.1.0.M1")
     compile("io.lettuce:lettuce-core:5.0.0.BUILD-SNAPSHOT") {
         exclude(group = "io.netty")
     }
