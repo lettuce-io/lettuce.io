@@ -13,6 +13,8 @@ function startApplication {
     echo "[INFO] Starting application on port $1"
 
     export SERVER_PORT=$1
+    rm -f lettuce-home-all-$1.jar
+    cp lettuce-home-all.jar lettuce-home-all-$1.jar
     ./start.sh
 
     for start in {1..20}
@@ -43,6 +45,8 @@ function killInstance {
             rm ${PIDFILE}
         fi
     fi
+
+    rm -f lettuce-home-all-$1.jar
 }
 
 PORT1_RUNNING=$(checkRun ${PORT1})

@@ -3,7 +3,7 @@
 PORT=${SERVER_PORT:-9080}
 
 rm -f lettuce-home-${PORT}.log
-nohup java -Dserver.port=${PORT} -jar lettuce-home-all.jar > lettuce-home-${PORT}.log 2>&1 &
+nohup java -Dserver.port=${PORT} -jar lettuce-home-all-${PORT}.jar > lettuce-home-${PORT}.log 2>&1 &
 
 RC=$?
 if [[ $RC == 0 ]] ; then
