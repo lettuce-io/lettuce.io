@@ -250,8 +250,16 @@ public final class Application {
 					String downloadUrl;
 					if (artifactVersion.getClassifier() == Versions.Classifier.Release
 							|| artifactVersion.getClassifier() == Versions.Classifier.Milestone) {
-						downloadUrl = String.format("https://github.com/mp911de/lettuce/releases/download/%s/lettuce-%s-bin.zip",
-								artifactVersion.getVersion(), artifactVersion.getVersion());
+
+						String template;
+
+						if (module.getBranch().equals("3") || module.getBranch().equals("4")) {
+							template = "https://github.com/lettuce-io/lettuce-core/releases/download/%s/lettuce-%s-bin.zip";
+						} else {
+							template = "https://github.com/lettuce-io/lettuce-core/releases/download/%s/lettuce-core-%s-bin.zip";
+						}
+
+						downloadUrl = String.format(template, artifactVersion.getVersion(), artifactVersion.getVersion());
 
 					} else {
 

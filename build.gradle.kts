@@ -64,7 +64,7 @@ dependencies {
         exclude(group = "io.netty", module = "netty-transport-native-epoll")
     }
     compile("io.projectreactor:reactor-core:3.1.0.M1")
-    compile("io.lettuce:lettuce-core:5.0.0.BUILD-SNAPSHOT") {
+    compile("io.lettuce:lettuce-core:5.0.0.M2") {
         exclude(group = "io.netty")
     }
     compile("org.yaml:snakeyaml:1.17")
