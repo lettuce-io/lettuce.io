@@ -24,6 +24,7 @@ import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.netty.handler.codec.http.HttpStatusClass;
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 import reactor.ipc.netty.NettyContext;
 import reactor.ipc.netty.http.client.HttpClient;
@@ -69,6 +70,7 @@ import org.yaml.snakeyaml.constructor.Constructor;
 /**
  * Main Application for the Lettuce home site.
  */
+@Slf4j
 public final class Application {
 
 	private final Map<String, Module> modules = new HashMap<>();
@@ -344,10 +346,10 @@ public final class Application {
 	}
 
 	private void startLog(NettyContext c) {
-		System.out.printf(
+		log.info(String.format(
 				"Server started in %d ms on: %s\n", Duration
 						.ofNanos(ManagementFactory.getThreadMXBean().getThreadCpuTime(Thread.currentThread().getId())).toMillis(),
-				c.address());
+				c.address()));
 	}
 
 	private Path resolveContentPath() throws IOException {
@@ -432,7 +434,7 @@ public final class Application {
 
 				String url = String.format("%s/%s/%s/%s/%s", repo, module.getGroupId().replace('.', '/'),
 						module.getArtifactId(), version.getVersion(), s);
-				System.out.println("Downloading from " + url);
+				log.info("Downloading from " + url);
 				return client.get(url);
 			}).flatMap(httpClientResponse -> httpClientResponse.receive().asByteArray().collectList().map(this::getBytes));
 		})).flatMap(content -> {

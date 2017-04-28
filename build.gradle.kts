@@ -38,11 +38,11 @@ configure<JavaPluginConvention> {
 }
 
 configure<ApplicationPluginConvention> {
-	mainClassName = "io.lettuce.Application"
+    mainClassName = "io.lettuce.Application"
 }
 
 configure<ShadowExtension> {
-	version = null
+    version = null
 }
 
 configure<CompassExtension> {
@@ -60,16 +60,18 @@ repositories {
 
 dependencies {
     compile("org.springframework:spring-core:5.0.0.BUILD-SNAPSHOT")
-    compile("io.projectreactor.ipc:reactor-netty:0.6.3.BUILD-SNAPSHOT")
+    compile("io.projectreactor.ipc:reactor-netty:0.6.3.BUILD-SNAPSHOT") {
+        exclude(group = "io.netty", module = "netty-transport-native-epoll")
+    }
     compile("io.projectreactor:reactor-core:3.1.0.M1")
     compile("io.lettuce:lettuce-core:5.0.0.BUILD-SNAPSHOT") {
         exclude(group = "io.netty")
     }
     compile("org.yaml:snakeyaml:1.17")
-    compileOnly("org.projectlombok:lombok:1.16.14")
+    compile("org.slf4j:slf4j-api:1.7.21")
     runtime("commons-logging:commons-logging:1.2")
-    runtime("org.slf4j:slf4j-api:1.7.21")
     runtime("ch.qos.logback:logback-classic:1.1.7")
+    compileOnly("org.projectlombok:lombok:1.16.14")
 }
 
 val processResources = tasks.getByName("processResources")
