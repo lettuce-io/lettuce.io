@@ -22,12 +22,10 @@ import io.lettuce.core.codec.StringCodec;
 
 import java.nio.ByteBuffer;
 
-
 /**
  * @author Mark Paluch
  */
-class StringByteCodec implements RedisCodec<String, byte[]>
-{
+class StringByteCodec implements RedisCodec<String, byte[]> {
 
 	public final static StringByteCodec INSTANCE = new StringByteCodec();
 

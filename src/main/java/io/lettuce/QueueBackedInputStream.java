@@ -31,186 +31,162 @@ import java.util.stream.Collector;
 /**
  * @author Mark Paluch
  */
-class QueueBackedInputStream extends InputStream
-{
+class QueueBackedInputStream extends InputStream {
 
-    final BlockingQueue<InputStream> stream;
-    volatile InputStream lastStream;
+	final BlockingQueue<InputStream> stream;
+	volatile InputStream lastStream;
 
-    private InputStream current;
-    private volatile boolean closed;
+	private InputStream current;
+	private volatile boolean closed;
 
-    public QueueBackedInputStream(BlockingQueue<InputStream> stream)
-    {
-        this.stream = stream;
-    }
+	public QueueBackedInputStream(BlockingQueue<InputStream> stream) {
+		this.stream = stream;
+	}
 
-    static Collector<InputStream, QueueBackedInputStream, InputStream> toInputStream() {
+	static Collector<InputStream, QueueBackedInputStream, InputStream> toInputStream() {
 
-       return new Collector<InputStream, QueueBackedInputStream, InputStream>() {
+		return new Collector<InputStream, QueueBackedInputStream, InputStream>() {
 
-           @Override
-           public Supplier<QueueBackedInputStream> supplier() {
-               return () -> new QueueBackedInputStream(new LinkedBlockingQueue<>());
-           }
+			@Override
+			public Supplier<QueueBackedInputStream> supplier() {
+				return () -> new QueueBackedInputStream(new LinkedBlockingQueue<>());
+			}
 
-           @Override
-           public BiConsumer<QueueBackedInputStream, InputStream> accumulator() {
-               return (q, i) -> q.stream.add(i);
-           }
+			@Override
+			public BiConsumer<QueueBackedInputStream, InputStream> accumulator() {
+				return (q, i) -> q.stream.add(i);
+			}
 
-           @Override
-           public BinaryOperator<QueueBackedInputStream> combiner() {
-               return (q1, q2) -> {
+			@Override
+			public BinaryOperator<QueueBackedInputStream> combiner() {
+				return (q1, q2) -> {
 
-                   while (!q2.stream.isEmpty()) {
-                       q2.stream.drainTo(q1.stream);
-                   }
+					while (!q2.stream.isEmpty()) {
+						q2.stream.drainTo(q1.stream);
+					}
 
-                   return q1;
-               };
-           }
+					return q1;
+				};
+			}
 
-           @Override
-           public Function<QueueBackedInputStream, InputStream> finisher() {
-               return q -> {
-                   if (!q.stream.isEmpty()) {
-                       q.lastStream = q.stream.stream().skip(q.stream.size() - 1).findAny().orElse(null);
-                       q.lastElementReceived();
-                   }
+			@Override
+			public Function<QueueBackedInputStream, InputStream> finisher() {
+				return q -> {
+					if (!q.stream.isEmpty()) {
+						q.lastStream = q.stream.stream().skip(q.stream.size() - 1).findAny().orElse(null);
+						q.lastElementReceived();
+					}
 
-                   return q;
-               };
-           }
+					return q;
+				};
+			}
 
-           @Override
-           public Set<Characteristics> characteristics() {
-               return Collections.emptySet();
-           }
-       };
-   }
+			@Override
+			public Set<Characteristics> characteristics() {
+				return Collections.emptySet();
+			}
+		};
+	}
 
-    @Override
-    public int available() throws IOException
-    {
+	@Override
+	public int available() throws IOException {
 
-        if (closed)
-        {
-            return -1;
-        }
+		if (closed) {
+			return -1;
+		}
 
-        advance();
+		advance();
 
-        return current.available();
-    }
+		return current.available();
+	}
 
-    private void advance()
-    {
+	private void advance() {
 
-        if (lastStream == current || current instanceof LastInputStream)
-        {
-            return;
-        }
+		if (lastStream == current || current instanceof LastInputStream) {
+			return;
+		}
 
-        while (current == null)
-        {
-            try
-            {
-                current = stream.take();
+		while (current == null) {
+			try {
+				current = stream.take();
 
-                if (current instanceof LastInputStream)
-                {
-                    current.close();
-                    current = null;
-                    return;
-                }
+				if (current instanceof LastInputStream) {
+					current.close();
+					current = null;
+					return;
+				}
 
-                if (current.available() == -1)
-                {
-                    current.close();
-                    current = null;
-                }
-            }
-            catch (Exception e)
-            {
-                Thread.currentThread().interrupt();
-                throw new IllegalStateException(e);
-            }
-        }
-    }
+				if (current.available() == -1) {
+					current.close();
+					current = null;
+				}
+			} catch (Exception e) {
+				Thread.currentThread().interrupt();
+				throw new IllegalStateException(e);
+			}
+		}
+	}
 
-    @Override
-    public int read() throws IOException
-    {
+	@Override
+	public int read() throws IOException {
 
-        if (closed)
-        {
-            return -1;
-        }
+		if (closed) {
+			return -1;
+		}
 
-        advance();
+		advance();
 
-        if (current == null)
-        {
-            return -1;
-        }
+		if (current == null) {
+			return -1;
+		}
 
-        return current.read();
-    }
+		return current.read();
+	}
 
-    @Override
-    public int read(byte[] b, int off, int len) throws IOException
-    {
+	@Override
+	public int read(byte[] b, int off, int len) throws IOException {
 
-        if (closed)
-        {
-            return -1;
-        }
+		if (closed) {
+			return -1;
+		}
 
-        advance();
+		advance();
 
-        if (current == null)
-        {
-            return -1;
-        }
+		if (current == null) {
+			return -1;
+		}
 
-        int read = current.read(b, off, len);
+		int read = current.read(b, off, len);
 
-        if (read < len)
-        {
-            current.close();
-            current = null;
-        }
+		if (read < len) {
+			current.close();
+			current = null;
+		}
 
-        return read;
-    }
+		return read;
+	}
 
-    @Override
-    public void close() throws IOException
-    {
+	@Override
+	public void close() throws IOException {
 
-        if (current != null)
-        {
-            current.close();
-            current = null;
-        }
-        closed = true;
-    }
+		if (current != null) {
+			current.close();
+			current = null;
+		}
+		closed = true;
+	}
 
-    public void lastElementReceived()
-    {
-        stream.add(LastInputStream.INSTANCE);
-    }
+	public void lastElementReceived() {
+		stream.add(LastInputStream.INSTANCE);
+	}
 
-    static class LastInputStream extends InputStream
-    {
+	static class LastInputStream extends InputStream {
 
-        static final LastInputStream INSTANCE = new LastInputStream();
+		static final LastInputStream INSTANCE = new LastInputStream();
 
-        @Override
-        public int read() throws IOException
-        {
-            throw new UnsupportedOperationException();
-        }
-    }
+		@Override
+		public int read() throws IOException {
+			throw new UnsupportedOperationException();
+		}
+	}
 }
