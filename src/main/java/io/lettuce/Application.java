@@ -433,7 +433,7 @@ public final class Application {
 
 		SetArgs setArgs = SetArgs.Builder.nx();
 		if (version.getClassifier() == Versions.Classifier.Snapshot) {
-			setArgs.ex(TimeUnit.SECONDS.convert(4, TimeUnit.HOURS));
+			setArgs.ex(TimeUnit.SECONDS.convert(1, TimeUnit.DAYS));
 		}
 
 		Mono<byte[]> contentLoader = withCaching(jarCacheKey, setArgs, Mono.defer(() -> {
