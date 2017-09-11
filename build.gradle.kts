@@ -60,11 +60,11 @@ repositories {
 
 dependencies {
     compile("org.springframework:spring-core:5.0.0.BUILD-SNAPSHOT")
-    compile("io.projectreactor.ipc:reactor-netty:0.6.3.BUILD-SNAPSHOT") {
+    compile("io.projectreactor.ipc:reactor-netty:0.7.0.M2") {
         exclude(group = "io.netty", module = "netty-transport-native-epoll")
     }
-    compile("io.projectreactor:reactor-core:3.1.0.M3")
-    compile("io.lettuce:lettuce-core:5.0.0.RC1") {
+    compile("io.projectreactor:reactor-core:3.1.0.RC1")
+    compile("io.lettuce:lettuce-core:5.0.0.RC2") {
         exclude(group = "io.netty")
     }
     compile("org.yaml:snakeyaml:1.17")

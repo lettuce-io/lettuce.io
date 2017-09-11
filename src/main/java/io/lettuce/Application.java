@@ -279,7 +279,7 @@ public final class Application {
 			Mono<Versions> snapshots = mavenMetadata(module, Versions.Classifier.Snapshot)
 					.map(meta -> Versions.create(meta, module));
 
-			versions = Mono.when(releases, snapshots).map(tuple -> tuple.getT1().mergeWith(tuple.getT2()));
+			versions = Mono.zip(releases, snapshots).map(tuple -> tuple.getT1().mergeWith(tuple.getT2()));
 
 		} else {
 			versions = mavenMetadata(module, versionType).map(meta -> Versions.create(meta, module));
