@@ -73,6 +73,9 @@ import org.yaml.snakeyaml.constructor.Constructor;
 @Slf4j
 public final class Application {
 
+	private final long SNAPSHOT_CACHING_DURATION = TimeUnit.SECONDS.convert(1, TimeUnit.DAYS);
+	private final long MAVEN_METADATA_CACHING_DURATION = TimeUnit.SECONDS.convert(1, TimeUnit.DAYS);
+	
 	private final Map<String, Module> modules = new HashMap<>();
 	private final String redisHost = System.getProperty("redis.host", "localhost");
 	private final HttpServer server = HttpServer.create("0.0.0.0", Integer.getInteger("server.port", 8080));
@@ -383,7 +386,9 @@ public final class Application {
 		String url = String.format("%s/%s/%s/maven-metadata.xml", repo, module.getGroupId().replace('.', '/'),
 				module.getArtifactId());
 
-		return withCaching(cacheKey, new SetArgs(), client.get(url, r -> {
+		SetArgs setArgs = new SetArgs().ex(MAVEN_METADATA_CACHING_DURATION);
+		
+		return withCaching(cacheKey, setArgs, client.get(url, r -> {
 
 			r.failOnClientError(false);
 			return Mono.empty();
@@ -432,8 +437,9 @@ public final class Application {
 		String repo = getRepo(version.getClassifier());
 
 		SetArgs setArgs = SetArgs.Builder.nx();
+
 		if (version.getClassifier() == Versions.Classifier.Snapshot) {
-			setArgs.ex(TimeUnit.SECONDS.convert(1, TimeUnit.DAYS));
+			setArgs.ex(SNAPSHOT_CACHING_DURATION);
 		}
 
 		Mono<byte[]> contentLoader = withCaching(jarCacheKey, setArgs, Mono.defer(() -> {
@@ -507,11 +513,11 @@ public final class Application {
 				}));
 	}
 
-	private String getRepo(Versions.Classifier classifier) {
+	private static String getRepo(Versions.Classifier classifier) {
 		return classifier == Versions.Classifier.Snapshot ? "https://oss.sonatype.org/content/repositories/snapshots"
 				: "https://oss.sonatype.org/content/repositories/releases";
 	}
-
+	
 	static class RequestedVersion {
 
 		private Versions.Classifier versionType;
