@@ -1,6 +1,7 @@
 import com.github.jengelman.gradle.plugins.shadow.ShadowExtension
 import com.github.robfletcher.compass.CompassExtension
 import java.util.concurrent.TimeUnit
+import java.util.regex.Pattern.compile
 
 configurations.all {
     it.resolutionStrategy.cacheChangingModulesFor(0, TimeUnit.SECONDS)
@@ -18,7 +19,7 @@ buildscript {
     dependencies {
         classpath("com.github.jengelman.gradle.plugins:shadow:1.2.4")
         classpath("com.github.robfletcher:compass-gradle-plugin:2.0.6")
-        classpath("io.projectreactor.ipc:reactor-netty:0.6.2.BUILD-SNAPSHOT")
+        classpath("io.projectreactor.ipc:reactor-netty:0.7.2.RELEASE")
     }
 }
 
@@ -59,12 +60,12 @@ repositories {
 }
 
 dependencies {
-    compile("org.springframework:spring-core:5.0.0.RELEASE")
-    compile("io.projectreactor.ipc:reactor-netty:0.7.0.RELEASE") {
+    compile("org.springframework:spring-core:5.0.1.RELEASE")
+    compile("io.projectreactor.ipc:reactor-netty:0.7.2.RELEASE") {
         exclude(group = "io.netty", module = "netty-transport-native-epoll")
     }
-    compile("io.projectreactor:reactor-core:3.1.0.RELEASE")
-    compile("io.lettuce:lettuce-core:5.0.0.RELEASE") {
+    compile("io.projectreactor:reactor-core:3.1.2.RELEASE")
+    compile("io.lettuce:lettuce-core:5.0.1.RELEASE") {
         exclude(group = "io.netty")
     }
     compile("org.yaml:snakeyaml:1.17")
