@@ -19,7 +19,7 @@ buildscript {
     dependencies {
         classpath("com.github.jengelman.gradle.plugins:shadow:1.2.4")
         classpath("com.github.robfletcher:compass-gradle-plugin:2.0.6")
-        classpath("io.projectreactor.ipc:reactor-netty:0.7.2.RELEASE")
+        classpath("io.projectreactor.ipc:reactor-netty:0.7.4.RELEASE")
     }
 }
 
@@ -60,12 +60,12 @@ repositories {
 }
 
 dependencies {
-    compile("org.springframework:spring-core:5.0.1.RELEASE")
-    compile("io.projectreactor.ipc:reactor-netty:0.7.2.RELEASE") {
+    compile("org.springframework:spring-core:5.0.4.RELEASE")
+    compile("io.projectreactor.ipc:reactor-netty:0.7.4.RELEASE") {
         exclude(group = "io.netty", module = "netty-transport-native-epoll")
     }
-    compile("io.projectreactor:reactor-core:3.1.2.RELEASE")
-    compile("io.lettuce:lettuce-core:5.0.1.RELEASE") {
+    compile("io.projectreactor:reactor-core:3.1.4.RELEASE")
+    compile("io.lettuce:lettuce-core:5.0.2.RELEASE") {
         exclude(group = "io.netty")
     }
     compile("org.yaml:snakeyaml:1.17")

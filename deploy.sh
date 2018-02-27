@@ -3,6 +3,7 @@
 PORT1=${SERVER_PORT1:-9081}
 PORT2=${SERVER_PORT2:-9082}
 
+touch .deploying
 function checkRun {
     nc -w 1 localhost $1 </dev/null
     echo -n $?
@@ -22,6 +23,7 @@ function startApplication {
         nc  -w 1 localhost $1 </dev/null
         if [[ $? == 0 ]] ; then
             echo "[INFO] Application is up and running"
+            rm .deploying
             RC=0
             return 0
         fi
