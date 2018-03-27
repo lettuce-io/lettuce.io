@@ -61,11 +61,11 @@ repositories {
 
 dependencies {
     compile("org.springframework:spring-core:5.0.4.RELEASE")
-    compile("io.projectreactor.ipc:reactor-netty:0.7.4.RELEASE") {
+    compile("io.projectreactor.ipc:reactor-netty:0.7.5.RELEASE") {
         exclude(group = "io.netty", module = "netty-transport-native-epoll")
     }
     compile("io.projectreactor:reactor-core:3.1.4.RELEASE")
-    compile("io.lettuce:lettuce-core:5.0.2.RELEASE") {
+    compile("io.lettuce:lettuce-core:5.0.3.RELEASE") {
         exclude(group = "io.netty")
     }
     compile("org.yaml:snakeyaml:1.17")
