@@ -1,28 +1,12 @@
 <!DOCTYPE html>
-<!--
-  ~ Copyright 2017 the original author or authors.
-  ~
-  ~ Licensed under the Apache License, Version 2.0 (the "License");
-  ~ you may not use this file except in compliance with the License.
-  ~ You may obtain a copy of the License at
-  ~
-  ~      http://www.apache.org/licenses/LICENSE-2.0
-  ~
-  ~ Unless required by applicable law or agreed to in writing, software
-  ~ distributed under the License is distributed on an "AS IS" BASIS,
-  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  ~ See the License for the specific language governing permissions and
-  ~ limitations under the License.
-  -->
-
-<html xmlns="http://www.w3.org/1999/html">
+<html xmlns="http://www.w3.org/1999/html" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Lettuce Versions</title>
     <meta name="description" content="">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'/>
+    <meta name="viewport" content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'/>
     <meta name="HandheldFriendly" content="true"/>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="MobileOptimized" content="320">
@@ -61,6 +45,7 @@
                     <nav id="nav">
                         <ul>
                             <li class="hide"><a href="/">Home</a></li>
+                            <li><a href="/docs/getting-started.html">Getting Started</a></li>
                             <li class="active"><a href="/docs/">Documentation</a></li>
                             <li><a href="https://github.com/lettuce-io/lettuce-core" class="fa fa-github-alt"
                                    title="Github">&nbsp;</a></li>
@@ -68,7 +53,7 @@
                                    title="Join the community chat on Gitter">&nbsp;</a></li>
                             <li><a href="https://groups.google.com/d/forum/lettuce-redis-client-users"
                                    class="fa fa-group"
-                                   title="Browse the Mailinglist">&nbsp;</a></li>
+                                   title="Browse the Mailing List">&nbsp;</a></li>
                             <li><a href="https://twitter.com/LettuceDriver" class="fa fa-twitter"
                                    title="Follow us on Twitter">&nbsp;</a></li>
                             <li><a href="http://stackoverflow.com/questions/tagged/lettuce" class="fa fa-stack-overflow"
@@ -80,7 +65,7 @@
             <div class="page-summary">
                 <div class="page-summary-content">
                     <div class="page-summary-wrap">
-                        <h1>Lettuce %branch%</h1>
+                        <h1>Lettuce <span th:text="${module.branch}"/></h1>
                         <div class="details">
                         <span id="author" class="author">Lettuce reference
                             documentation and Javadoc.</span><br>
@@ -92,7 +77,24 @@
             <div id="main" class="book">
 
                 <section id="applications">
-                    %versions%
+
+                    <article th:each="version : ${versions}">
+                        <div class="title">
+                            <h1>Lettuce <span th:text="${version.version}"/></h1>
+                            <div class="version">
+                                <span class="version" th:text="${version.version}"/>
+                                <span class="version"
+                                      th:class="${version.classifier.name == 'Release'}? 'stable' : 'milestone'"
+                                      th:text="${version.classifier.name == 'Release'}? 'Stable' : ${version.classifier.name}"/>
+                            </div>
+                        </div>
+                        <div class="download">
+                            <a th:href="'/'+${module.artifactId}+'/'+${version.version}+'/download'">Download</a>
+                        </div>
+                        <div class="javadoc">
+                            <a th:href="'/'+${module.artifactId}+'/'+${version.version}+'/api'">Javadoc</a>
+                        </div>
+                    </article>
                 </section>
             </div>
             <footer id="footer">
@@ -130,7 +132,7 @@
                 </div>
                 <div class="footer-content-text">
                     <span class="licence">Lettuce is licensed under the Apache Software License 2.</span>
-                    © 2013-2017 <a href="/">Lettuce</a>, powered by
+                    © 2013-2018 <a href="/">Lettuce</a>, powered by
                     <a href="http://pivotal.io/" class="pivotal">Pivotal</a>
                 </div>
             </footer>

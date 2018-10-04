@@ -1,0 +1,30 @@
+[
+  {
+    "label": "Lettuce 5.1.x",
+    "module": "core",
+    "classifier": "Release",
+    "description": "Lettuce Redis Client",
+    "ghBranch": "https://github.com/lettuce-io/lettuce-core",
+    "reference": true,
+    "wiki": true
+  },
+  {
+    "label": "Lettuce 4.5.x",
+    "module": "lettuce-4",
+    "classifier": "Release",
+    "description": "Lettuce Redis Client",
+    "ghBranch": "https://github.com/lettuce-io/lettuce-core/tree/4.x",
+    "reference": false,
+    "wiki": true
+  },
+  {
+    "label": "Lettuce 3",
+    "module": "lettuce-3",
+    "classifier": "Release",
+    "description": "Lettuce 3.x branch, compatible with Java 6",
+    "ghBranch": "https://github.com/lettuce-io/lettuce-core/tree/4.x",
+    "deprecated": true,
+    "reference": false,
+    "wiki": false
+  }
+]

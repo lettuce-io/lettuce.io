@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/html">
+<html xmlns="http://www.w3.org/1999/html" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Lettuce Docs</title>
     <meta name="description" content="">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
     <meta name="HandheldFriendly" content="true"/>
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="MobileOptimized" content="320">
@@ -45,6 +45,7 @@
                     <nav id="nav">
                         <ul>
                             <li class="hide"><a href="/">Home</a></li>
+                            <li><a href="/docs/getting-started.html">Getting Started</a></li>
                             <li class="active"><a href="/docs/">Documentation</a></li>
                             <li><a href="https://github.com/lettuce-io/lettuce-core" class="fa fa-github-alt"
                                    title="Github">&nbsp;</a></li>
@@ -52,7 +53,7 @@
                                    title="Join the community chat on Gitter">&nbsp;</a></li>
                             <li><a href="https://groups.google.com/d/forum/lettuce-redis-client-users"
                                    class="fa fa-group"
-                                   title="Browse the Mailinglist">&nbsp;</a></li>
+                                   title="Browse the Mailing List">&nbsp;</a></li>
                             <li><a href="https://twitter.com/LettuceDriver" class="fa fa-twitter"
                                    title="Follow us on Twitter">&nbsp;</a></li>
                             <li><a href="http://stackoverflow.com/questions/tagged/lettuce" class="fa fa-stack-overflow"
@@ -66,8 +67,10 @@
                     <div class="page-summary-wrap">
                         <h1>Documentation</h1>
                         <div class="details">
-                        <span id="author" class="author">Lettuce reference
-                            documentation, code samples, and Javadoc.</span><br>
+                        <span id="author" class="author"><p>Lettuce reference
+                            documentation, code samples, and Javadoc.</p>
+                        <p>Latest stable version: <span class="version stable"
+                                                        th:text="${latestStable}"></span></p></span>
                         </div>
                     </div>
                 </div>
@@ -76,92 +79,42 @@
             <div id="main" class="book">
 
                 <section id="applications">
-                    <article>
+                    <article th:each="item : ${items}">
                         <div class="title">
-                            <h1 title="io.lettuce:lettuce-core:5.1.0.RELEASE"><a href="/core/">Lettuce 5.1.x</a></h1>
+                            <h1 th:title="${item.module.groupId}+':'+${item.module.artifactId}+':'+${item.version.version}">
+                                <a th:href="'/'+${item.module.name}+'/'" th:text="${item.artifact.label}"/></h1>
                             <div class="version">
-                                <a href="https://search.maven.org/artifact/io.lettuce/lettuce-core/5.1.0.RELEASE/jar"><span
-                                        class="version">5.1.0.RELEASE</span></a>
-                                <span class="version stable">Release</span>
+
+                                <a th:href="'https://search.maven.org/artifact/'+${item.module.groupId}+'/'+${item.module.artifactId}+'/'+${item.version.version}"
+                                   class="version"><span class="version" th:text="${item.version.version}"/></a>
+                                <span class="version" th:text="${item.version.classifier.name}"
+                                      th:if="${not item.artifact.deprecated}"></span>
+                                <span class="version deprecated"
+                                      th:if="${item.artifact.deprecated}">Out of Maintenance</span>
                             </div>
-                            <p>Lettuce Redis Client</p>
+                            <p th:text="${item.artifact.description}"/>
                         </div>
                         <div class="github">
-                            <a href="https://github.com/lettuce-io/lettuce-core">
+                            <a th:href="${item.artifact.ghBranch}">
                                 <span class="fa fa-github"></span>
                                 Github
                             </a>
                         </div>
                         <div class="download">
                             <strong>Download</strong><br/>
-                            <a href="/core/release/download/">Release Bundle</a>
-                        </div>
-                       <div class="javadoc">
-                            <strong>Javadoc</strong><br/>
-                            <a href="/core/release/api/">Release</a> |
-                            <a href="/core/snapshot/api/">Snapshot</a>
-                        </div>
-                        <div class="reference">
-                            <strong>Reference</strong><br/>
-                            <a href="/core/release/reference/">Release</a> | <a href="https://github.com/lettuce-io/lettuce-core/wiki">Wiki</a>
-                        </div>
-                    </article>
-                    <article>
-                        <div class="title">
-                            <h1 title="biz.paluch.redis:lettuce:4.5.0.Final"><a href="/lettuce-4/">Lettuce 4.5.x</a></h1>
-                            <div class="version">
-                                <a href="https://search.maven.org/artifact/biz.paluch.redis/lettuce/4.5.0.Final/jar"><span
-                                        class="version">4.5.0.Final</span></a>
-                                <span class="version stable">Release</span>
-                            </div>
-                            <p>Lettuce Redis Client</p>
-                        </div>
-                        <div class="github">
-                            <a href="https://github.com/lettuce-io/lettuce-core/tree/4.x">
-                                <span class="fa fa-github"></span>
-                                Github
-                            </a>
-                        </div>
-                        <div class="download">
-                            <strong>Download</strong><br/>
-                            <a href="/lettuce-4/release/download/">Release Bundle</a>
+                            <a th:href="'/'+${item.artifact.module}+'/release/download'">Release Bundle</a>
                         </div>
                         <div class="javadoc">
                             <strong>Javadoc</strong><br/>
-                            <a href="/lettuce-4/release/api/">Release</a> |
-                            <a href="/lettuce-4/snapshot/api/">Snapshot</a>
+                            <a th:href="'/'+${item.artifact.module}+'/release/api'">Release</a> |
+                            <a th:href="'/'+${item.artifact.module}+'/snapshot/api'">Snapshot</a>
                         </div>
                         <div class="reference">
                             <strong>Reference</strong><br/>
-                            <a href="https://github.com/mp911de/lettuce/wiki">Wiki</a>
-                        </div>
-                    </article>
-                    <article>
-                        <div class="title">
-                            <h1 title="biz.paluch.redis:lettuce:3.5.0.Final"><a href="/lettuce-3/">Lettuce 3</a></h1>
-                            <div class="version">
-                                <a href="https://search.maven.org/artifact/biz.paluch.redis/lettuce/3.5.0.Final/jar"><span
-                                        class="version">3.5.0.Final</span></a>
-                                <span class="version deprecated">Out of Maintenance</span>
-                            </div>
-                            <p>Lettuce 3.x branch, compatible with Java 6</p>
-                        </div>
-                        <div class="github">
-                            <a href="https://github.com/mp911de/lettuce/tree/3.x">
-                                <span class="fa fa-github"></span>
-                                Github
-                            </a>
-                        </div>
-                        <div class="download">
-                            <strong>Download</strong><br/>
-                            <a href="/lettuce-3/release/download/">Release Bundle</a>
-                        </div>
-                        <div class="javadoc">
-                            <strong>Javadoc</strong><br/>
-                            <a href="/lettuce-3/release/api/">Release</a> |
-                            <a href="/lettuce-3/snapshot/api/">Snapshot</a>
-                        </div>
-                        <div class="reference">
+                            <a th:href="'/'+${item.artifact.module}+'/release/reference'"
+                               th:if="${item.artifact.reference}">Release</a> <span
+                                th:if="${item.artifact.referenceAndWiki}">|</span> <a
+                                href="https://github.com/lettuce-io/lettuce-core/wiki" th:if="${item.artifact.wiki}">Wiki</a>
                         </div>
                     </article>
                 </section>
@@ -201,7 +154,7 @@
                 </div>
                 <div class="footer-content-text">
                     <span class="licence">Lettuce is licensed under the Apache Software License 2.</span>
-                    © 2013-2017 <a href="/">Lettuce</a>, powered by
+                    © 2013-2018 <a href="/">Lettuce</a>, powered by
                     <a href="http://pivotal.io/" class="pivotal">Pivotal</a>
                 </div>
             </footer>
