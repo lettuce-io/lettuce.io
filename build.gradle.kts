@@ -31,6 +31,12 @@ buildscript {
     }
 }
 
+configurations.all {
+    resolutionStrategy {
+        force("rubygems:rb-inotify:0.9.10")
+    }
+}
+
 plugins {
     java
     kotlin("jvm")
@@ -93,7 +99,7 @@ dependencies {
         exclude(group = "io.netty", module = "netty-transport-native-epoll")
     }
     compile("io.projectreactor:reactor-core:3.2.0.RELEASE")
-    
+
     compile("io.lettuce:lettuce-core:5.1.0.RELEASE") {
         exclude(group = "io.netty")
     }
