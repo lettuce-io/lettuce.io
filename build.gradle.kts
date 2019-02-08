@@ -71,7 +71,6 @@ application {
     mainClassName = "io.lettuce.Application"
 }
 
-tasks.withType<JavaJarExec>()
 
 configure<CompassExtension> {
     sassDir = file("$projectDir/src/main/sass")

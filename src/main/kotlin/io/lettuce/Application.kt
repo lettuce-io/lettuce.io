@@ -347,6 +347,7 @@ class Application {
         return withCaching(cacheKey, setArgs, client.get(url) { r ->
 
             r.failOnClientError(false)
+            r.followRedirect()
             Mono.empty()
         }.flatMap { httpClientResponse ->
 
@@ -513,7 +514,8 @@ class Application {
                 return "https://oss.sonatype.org/content/repositories/snapshots"
             }
 
-            return "https://oss.sonatype.org/content/repositories/releases"
+            //return "https://oss.sonatype.org/content/repositories/releases"
+            return "https://repo1.maven.org/content/repositories/releases"
         }
 
         private fun cacheControl(duration: Duration): String {
