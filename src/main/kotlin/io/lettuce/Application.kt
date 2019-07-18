@@ -105,6 +105,7 @@ class Application {
                     } //
                     .get("/docs/") { _, resp -> this.docs(resp) } //
                     .get("/assets/**") { req, resp -> this.assets(req, resp) } //
+                    .get("/{version}/assets/**") { req, resp -> this.assets(req, resp) } //
                     .get("/{module}/") { req, resp -> this.versionsPage(req, resp) } //
                     .get("/") { _, res ->
                         res.header(HttpHeaderNames.CONTENT_TYPE, TEXT_HTML)
@@ -313,6 +314,12 @@ class Application {
             return send404(resp)
         }
 
+        var index = prefix.indexOf("/assets");
+        if (index == -1) {
+            return send404(resp)
+        }
+        prefix = prefix.substring(index)
+
         if (prefix[0] == '/') {
             prefix = prefix.substring(1)
         }
@@ -375,7 +382,7 @@ class Application {
         val url = String.format("%s/%s/%s/%s/maven-metadata.xml", repo, module.groupId.replace('.', '/'),
                 module.artifactId, version.version)
 
-        return client.get(url).flatMap<InputStream> { httpClientResponse ->
+        return client.get(url) { r -> r.followRedirect() }.flatMap<InputStream> { httpClientResponse ->
             httpClientResponse.receive().asInputStream()
                     .collect<InputStream, QueueBackedInputStream>(QueueBackedInputStream.toInputStream())
         }
@@ -401,7 +408,7 @@ class Application {
                 val url = String.format("%s/%s/%s/%s/%s", repo, module.groupId.replace('.', '/'),
                         module.artifactId, version.version, s)
                 log.info("Downloading from $url")
-                client.get(url)
+                client.get(url) { r -> r.followRedirect() }
             }.flatMap<ByteArray> { httpClientResponse ->
                 httpClientResponse.receive().asByteArray().collectList()
                         .map { getBytes(it) }
@@ -515,7 +522,7 @@ class Application {
             }
 
             //return "https://oss.sonatype.org/content/repositories/releases"
-            return "https://repo1.maven.org/content/repositories/releases"
+            return "https://repo1.maven.org/maven2"
         }
 
         private fun cacheControl(duration: Duration): String {

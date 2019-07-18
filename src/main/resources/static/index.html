@@ -12,7 +12,7 @@
     <meta name="MobileOptimized" content="320">
     <meta http-equiv="cleartype" content="on">
 
-    <link rel="icon" type="image/png" href="favicon.ico"/>
+    <link rel="icon" type="image/png" href="/favicon.ico"/>
     <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/assets/img/apple-touch-icon-180.png">
     <link rel="apple-touch-icon-precomposed" sizes="152x152" href="/assets/img/apple-touch-icon-152.png">
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/assets/img/apple-touch-icon-144.png">
@@ -27,7 +27,7 @@
 
     <link rel="icon" sizes="192x192" href="/assets/img/touch/touch-icon-192x192.png">
     <link rel="icon" sizes="128x128" href="/assets/img/touch/touch-icon-128x128.png">
-    <link href="/assets/css/lettuce.css?v=1" media="all" rel="stylesheet"/>
+    <link href="/v2/assets/css/lettuce.css" media="all" rel="stylesheet"/>
 </head>
 <body>
 
@@ -126,32 +126,108 @@
                     </div>
                 </section>
                 <section id="key-features">
-                    <article class="clustering">
+                    <article class="intro">
                         <div>
+                            <div class="content">
+                                <h1><a href="docs/getting-started.html">Simple, yet Powerful</a></h1>
+                                <p>
+                                    Lettuce comes with an API that gets you started quickly. Its simple yet powerful
+                                    programming model allows you for trivial use-cases as well as for chained
+                                    asynchronous flows.
+                                </p>
+                            </div>
+
+                            <div class="content-continue">
+
+                            <div class="code-box-copy">
+                                <button class="code-box-copy__btn" data-clipboard-target="#example-java"
+                                        title="Copy"></button>
+    <pre><code class="language-java" data-language="java" id="example-java">RedisClient redisClient <span
+            class="token operator">=</span> RedisClient<span class="token punctuation">.</span><span
+            class="token function">create<span class="token punctuation">(</span></span><span class="token string">"<a
+            class="token url-link" href="redis://localhost/0">redis://localhost/0</a>"</span><span
+            class="token punctuation">)</span><span class="token punctuation">;</span><span class="token lf">
+</span>StatefulRedisConnection<span class="token operator">&lt;</span>String<span class="token punctuation">,</span> String&gt; connection <span
+            class="token operator">=</span> redisClient<span class="token punctuation">.</span><span
+            class="token function">connect<span class="token punctuation">(</span></span><span
+            class="token punctuation">)</span><span class="token punctuation">;</span><span class="token lf">
+</span><span class="token lf">
+</span>System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span
+            class="token function">println<span class="token punctuation">(</span></span><span class="token string">"Connected to Redis"</span><span
+            class="token punctuation">)</span><span class="token punctuation">;</span><span class="token lf">
+</span>connection<span class="token punctuation">.</span><span class="token function">sync<span
+            class="token punctuation">(</span></span><span class="token punctuation">)</span><span
+            class="token punctuation">.</span><span class="token function">set<span
+            class="token punctuation">(</span></span><span class="token string">"key"</span><span
+            class="token punctuation">,</span> <span class="token string">"Hello World"</span><span
+            class="token punctuation">)</span><span class="token punctuation">;</span><span class="token lf">
+</span><span class="token lf">
+</span>connection<span class="token punctuation">.</span><span class="token function">close<span
+            class="token punctuation">(</span></span><span class="token punctuation">)</span><span
+            class="token punctuation">;</span><span class="token lf">
+</span>redisClient<span class="token punctuation">.</span><span class="token function">shutdown<span
+            class="token punctuation">(</span></span><span class="token punctuation">)</span><span
+            class="token punctuation">;</span> <span class="token lf">
+</span></code></pre>
+                            </div>
+                            </div>
+                        </div>
+                    </article>
+                    <article class="clustering">
+                        <div class="content">
                             <span class="icon"></span>
-                            <h1>Scale Out</h1>
+                            <h1><a href="/core/release/reference/index.html#ha-sharding">Scale Out</a></h1>
                             <p>
                                 Redis Standalone, Master/Slave, Redis Sentinel and Redis Cluster. Lettuce connects
-                                with all operational models natively supported by Redis. Partition-tolerance, Read Slaves
-                                and Transport-Level-Security provide the required foundation for highly scalable applications.
+                                with all operational models natively supported by Redis. Partition-tolerance, Read
+                                Slaves
+                                and Transport-Level-Security provide the required foundation for highly scalable
+                                applications.
                             </p>
                         </div>
                     </article>
                     <article class="dynamic-api">
-                        <div>
-                            <h1>Dynamic API</h1>
+                        <div class="content">
+                            <h1><a href="/core/release/reference/index.html#redis-command-interfaces">Dynamic API</a></h1>
                             <p>
                                 Redis Modules drive evolution and demand a client that is able to react to change.
                                 Lettuce's dynamic Redis Commands Interfaces leverage the dynamic module API with
                                 custom API interfaces.
                             </p>
+
+                            <div class="code-box-copy">
+                                <button class="code-box-copy__btn" data-clipboard-target="#example-dynamic"
+                                        title="Copy"></button>
+    <pre><code class="language-java" data-language="java" id="example-dynamic"><span
+            class="token keyword">interface</span> <span class="token class-name">MyCommandInterface</span> <span
+            class="token keyword">extends</span> <span class="token class-name">Commands</span> <span
+            class="token punctuation">{</span><span class="token lf">
+</span><span class="token lf">
+</span>  String <span class="token function">get<span class="token punctuation">(</span></span>String key<span
+            class="token punctuation">)</span><span class="token punctuation">;</span><span class="token lf">
+</span><span class="token lf">
+</span>  @<span class="token function">Command<span class="token punctuation">(</span></span><span class="token string">"GET"</span><span
+            class="token punctuation">)</span><span class="token lf">
+</span>  <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span
+            class="token function">getAsByteArray<span class="token punctuation">(</span></span>String key<span
+            class="token punctuation">)</span><span class="token punctuation">;</span><span class="token lf">
+</span><span class="token lf">
+</span>  @<span class="token function">Command<span class="token punctuation">(</span></span><span class="token string">"NR.RUN net"</span><span
+            class="token punctuation">)</span><span class="token lf">
+</span>  <span class="token keyword">double</span> <span class="token function">neuralRun<span
+            class="token punctuation">(</span></span><span class="token keyword">int</span> from<span
+            class="token punctuation">,</span> <span class="token keyword">int</span> to<span class="token punctuation">)</span><span
+            class="token punctuation">;</span><span class="token lf">
+</span><span class="token punctuation">}</span><span class="token lf">
+</span></code></pre>
+                            </div>
                         </div>
                     </article>
                     <article class="cloud-ready">
-                        <div>
+                        <div class="content">
                             <span class="icon"></span>
-                            <h1>Cloud Ready</h1>
-                            <p style="margin-bottom: 0">Battle-tested with major Cloud-based Redis services.
+                            <h1><a href="/core/release/reference/index.html#ha-sharding">Cloud Ready</a></h1>
+                            <p>Battle-tested with major Cloud-based Redis services.
                                 Lettuce adopts the specifics of various cloud offerings to seamlessly
                                 integrate for best performance.
                             </p>
@@ -203,24 +279,32 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-2.1.4.js"></script>
-<script src="/assets/js/app.js"></script>
+<script src="/v2/assets/js/app.js"></script>
+<script src="/v2/assets/js/clipboard.min.js"></script>
+<script src="/v2/assets/js/code-box-copy.js"></script>
 <!-- Piwik -->
 <script type="text/javascript">
-  var _paq = _paq || [];
-  // tracker methods like "setCustomDimension" should be called before "trackPageView"
-  _paq.push(["setCookieDomain", "*.lettuce.io"]);
-  _paq.push(['setDomains', ['*.lettuce.io', 'lettuce.io']]);
-  _paq.push(['trackPageView']);
-  _paq.push(['enableLinkTracking']);
-  (function() {
-    var u="//piwik.paluch.biz/";
-    _paq.push(['setTrackerUrl', u+'piwik.php']);
-    _paq.push(['setSiteId', '6']);
-    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
-  })();
+    var _paq = _paq || [];
+    // tracker methods like "setCustomDimension" should be called before "trackPageView"
+    _paq.push(["setCookieDomain", "*.lettuce.io"]);
+    _paq.push(['setDomains', ['*.lettuce.io', 'lettuce.io']]);
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    (function () {
+        var u = "//piwik.paluch.biz/";
+        _paq.push(['setTrackerUrl', u + 'piwik.php']);
+        _paq.push(['setSiteId', '6']);
+        var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+        g.type = 'text/javascript';
+        g.async = true;
+        g.defer = true;
+        g.src = u + 'piwik.js';
+        s.parentNode.insertBefore(g, s);
+    })();
+
+    $('.code-box-copy').codeBoxCopy();
 </script>
-<noscript><p><img src="//piwik.paluch.biz/piwik.php?idsite=6&rec=1" style="border:0;" alt="" /></p></noscript>
+<noscript><p><img src="//piwik.paluch.biz/piwik.php?idsite=6&rec=1" style="border:0;" alt=""/></p></noscript>
 <!-- End Piwik Code -->
 </body>
 </html>

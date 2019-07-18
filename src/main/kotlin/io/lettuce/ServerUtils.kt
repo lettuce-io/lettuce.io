@@ -42,6 +42,7 @@ internal object ServerUtils {
             fileTypeMap.addMimeTypes("text/css css text CSS")
             fileTypeMap.addMimeTypes("text/javascript js text JS")
             fileTypeMap.addMimeTypes("image/png png image PNG")
+            fileTypeMap.addMimeTypes("image/svg+xml svg image svg")
             fileTypeMap.addMimeTypes("application/x-font-woff woff font WOFF")
             fileTypeMap.addMimeTypes("application/x-font-woff woff2 font WOFF2")
 

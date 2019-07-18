@@ -1,687 +1,801 @@
 // General styles
 
 a {
-  color: $primary;
-  text-decoration: none;
-  &:hover { text-decoration: underline; }
+    color: $primary;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
 }
 
-h1, h2, h3, h4 { font-family: $header-font
+h1, h2, h3, h4 {
+    font-family: $header-font
 }
 
 ::-moz-selection {
-  background: $primary;
-  color: white;
-  text-shadow: 0 0 0 white;
+    background: $primary;
+    color: white;
+    text-shadow: 0 0 0 white;
 }
+
 ::selection {
-  background: $primary;
-  color: white;
-  text-shadow: 0 0 0 white;
+    background: $primary;
+    color: white;
+    text-shadow: 0 0 0 white;
 }
 
 span.version {
-  display: inline;
-  background: $primary;
-  color: white;
-  border-radius: 3px;
-  font-size: 11px;
-  text-transform: uppercase;
-  font-weight: bold;
-  padding: 2Px 4px 2px;
-  line-height: 14px;
+    display: inline;
+    background: $primary;
+    color: white;
+    border-radius: 3px;
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: bold;
+    padding: 2Px 4px 2px;
+    line-height: 14px;
 
-  &.deprecated {
-    background: $text-color;
-  }
+    &.deprecated {
+        background: $text-color;
+    }
 
-  &.milestone {
-    background: #ffffff;
-    color: $primary;
-    border: 1px solid $primary;
-  }
+    &.milestone {
+        background: #ffffff;
+        color: $primary;
+        border: 1px solid $primary;
+    }
 }
 
 
 // Application
 
 body {
-  font: 300 16px/1.5em $body-font;
-  background-color: #f1f1f1;
-  color: $text-color;
-  margin: 0;
-  padding: 0;
-  -webkit-font-smoothing: antialiased
+    font: 300 16px/1.5em $body-font;
+    background-color: #f1f1f1;
+    color: $text-color;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased
 }
 
 // Size Application
 
 .container {
-  max-width: 1100px;
-  margin: 0 auto;
+    max-width: 1100px;
+    margin: 0 auto;
 }
 
 // Header
 
 #header {
-  border-top: 4px solid $primary;
-  background: $background;
-  .heading {
-    @extend .container;
-    @include clearfix();
-    position: relative;
-    max-width: 1100px;
-    // padding: 0 20px;
-  }
-  h1#logo {
-    margin: 7px 0 0 10px;
-    padding: 0;
-    float: left;
-    a {
-      display: block;
-      background: url(../img/lettuce-2x.png) no-repeat 0 0;
-      height: 53px;
-      width: 253px;
-      background-size: 215px 107px;
-      text-indent: -6000em;
-      margin: 8px 0;
-      &:hover {
-        strong{
-          @include opacity(1);
-        }
-      }
-      strong{
-        display: block;
-        background: url(../img/lettuce-2x.png) no-repeat 0 -53px;
-        background-size: 215px 107px;
-        margin: 8px 0;
-        line-height: 76px;
-        @include transition-property(opacity);
-        @include transition-duration($hover-transition-duration);
-        @include opacity(0);
-      }
+    border-top: 4px solid $primary;
+    background: $background;
+
+    .heading {
+        @extend .container;
+        @include clearfix();
+        position: relative;
+        max-width: 1100px;
+        // padding: 0 20px;
     }
-  }
-  #nav, #nav ul {
-    display: block;
-    font-family: $header-font;
-    margin: 0;
-    padding: 0;
-  }
-  #nav {
-    @include clearfix();
-    float: right;
-    margin-right: 10px;
-  }
-  #nav ul {
-    li {
-      display: block;
-      float: left;
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      &.hide {
-        display: none;
-      }
-      a {
-        color: white;
-        text-decoration: none;
-        font-weight: 500;
+
+    h1#logo {
+        margin: 7px 0 0 10px;
+        padding: 0;
+        float: left;
+
+        a {
+            display: block;
+            background: url(../img/lettuce-2x.png) no-repeat 0 0;
+            height: 53px;
+            width: 253px;
+            background-size: 215px 107px;
+            text-indent: -6000em;
+            margin: 8px 0;
+
+            &:hover {
+                strong {
+                    @include opacity(1);
+                }
+            }
+
+            strong {
+                display: block;
+                background: url(../img/lettuce-2x.png) no-repeat 0 -53px;
+                background-size: 215px 107px;
+                margin: 8px 0;
+                line-height: 76px;
+                @include transition-property(opacity);
+                @include transition-duration($hover-transition-duration);
+                @include opacity(0);
+            }
+        }
+    }
+
+    #nav, #nav ul {
         display: block;
-        text-transform: uppercase;
-        font-size: 0.9em;
-        line-height: 76px;
+        font-family: $header-font;
         margin: 0;
-        padding: 0 12px;
-        @include transition-property(background-color);
-        @include transition-duration($hover-transition-duration);
-        &:hover {
-          background: $primary;
-        }
-      }
-      &:last-child {
-        border: 0 none;
-      }
-      &.active {
-        background: $primary;
-      }
+        padding: 0;
     }
-  }
+
+    #nav {
+        @include clearfix();
+        float: right;
+        margin-right: 10px;
+    }
+
+    #nav ul {
+        li {
+            display: block;
+            float: left;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+
+            &.hide {
+                display: none;
+            }
+
+            a {
+                color: white;
+                text-decoration: none;
+                font-weight: 500;
+                display: block;
+                text-transform: uppercase;
+                font-size: 0.9em;
+                line-height: 76px;
+                margin: 0;
+                padding: 0 12px;
+                @include transition-property(background-color);
+                @include transition-duration($hover-transition-duration);
+
+                &:hover {
+                    background: $primary;
+                }
+            }
+
+            &:last-child {
+                border: 0 none;
+            }
+
+            &.active {
+                background: $primary;
+            }
+        }
+    }
 }
 
 // Footer
 
 #footer {
-  text-align: left;
-  background-color: $background;
-  color: white;
-  .footer-content {
-    background: #423e3c;
-    padding: 2em 0 2.5em;
-  }
-  .footer-content-text {
-    @include clearfix();
-    @extend .container;
-    max-width: 1100px;
-    padding: 2em 1.5em;
-    .licence {
-      color: rgba(255,255,255,.3);
-      display: block;
-      font-size: 0.9em;
-      padding-bottom: 0.4em;
+    text-align: left;
+    background-color: $background;
+    color: white;
+
+    .footer-content {
+        background: #423e3c;
+        padding: 2em 0 2.5em;
     }
-  }
-  .row {
-    @include clearfix();
-    @extend .container;
-    max-width: 1100px;
-    padding: 0 1.5em;
+
+    .footer-content-text {
+        @include clearfix();
+        @extend .container;
+        max-width: 1100px;
+        padding: 2em 1.5em;
+
+        .licence {
+            color: rgba(255, 255, 255, .3);
+            display: block;
+            font-size: 0.9em;
+            padding-bottom: 0.4em;
+        }
+    }
+
+    .row {
+        @include clearfix();
+        @extend .container;
+        max-width: 1100px;
+        padding: 0 1.5em;
+
+        nav {
+            float: left;
+            width: 25%;
+        }
+    }
+
+    nav, nav ul {
+        margin: 0;
+        padding: 0;
+
+        a {
+            color: white;
+            //text-transform: uppercase;
+            font-size: 0.9em;
+            cursor: pointer;
+        }
+    }
+
     nav {
-      float: left;
-      width: 25%;
     }
-  }
-  nav, nav ul {
-    margin: 0;
-    padding: 0;
-    a {
-      color: white;
-      //text-transform: uppercase;
-      font-size: 0.9em;
-      cursor: pointer;
+
+    ul {
+        li {
+            //display: inline;
+            list-style: none;
+
+            &.heading {
+                font-weight: bold;
+                text-transform: uppercase;
+                color: $primary;
+            }
+        }
     }
-  }
-  nav {
-  }
-  ul {
-    li {
-      //display: inline;
-      list-style: none;
-      &.heading {
-        font-weight: bold;
-        text-transform: uppercase;
-        color: $primary;
-      }
-    }
-  }
 }
 
 // Welcome
 
 section#welcome {
-  padding: 2.2em 0 3em;
-  //margin: 2em 0 2em;
-  text-align: left;
-  font-size: 1.2em;
-  height: 360px;
-  background: #e5e2b6 url('../img/keyvisual.jpg') no-repeat center 35%;
+    padding: 2.2em 0 3em;
+    //margin: 2em 0 2em;
+    text-align: left;
+    font-size: 1.2em;
+    height: 360px;
+    background: #e5e2b6 url('../img/keyvisual.jpg') no-repeat center 35%;
 
-  article {
-    color: white;
-    text-align: center;
-    span.logo-lettuce {
-      display: block;
-      margin-top: 80px;
-      margin-bottom: 60px;
+    article {
+        color: white;
+        text-align: center;
+
+        span.logo-lettuce {
+            display: block;
+            margin-top: 80px;
+            margin-bottom: 60px;
+        }
+
+        h1 {
+            color: white;
+            font: normal 1.8em/0.7em $header-font;
+
+            strong {
+                display: inline;
+                font-weight: normal;
+                text-align: left;
+                background: rgba(52, 48, 45, .7);
+                font-size: 1.3em;
+                padding: 2px 10px;
+            }
+        }
+
+        a {
+            color: white;
+        }
+
+        p {
+            font-weight: lighter;
+            line-height: 40px;
+            font-size: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+
+            span {
+                background: rgba(52, 48, 45, .7);
+                padding: 8px 10px;
+            }
+        }
     }
-    h1 {
-      color: white;
-      font: normal 1.8em/0.7em $header-font;
-      strong {
-        display: inline;
-        font-weight: normal;
-        text-align: left;
-        background: rgba(52,48,45,.7);
-        font-size: 1.3em;
-        padding: 2px 10px;
-      }
-    }
-    a {
-      color: white;
-    }
-    p {
-      font-weight: lighter;
-      line-height: 40px;
-      font-size: 20px;
-      max-width: 1000px;
-      margin: 0 auto;
-      text-align: center;
-      span {
-        background: rgba(52,48,45,.7);
-        padding: 8px 10px;
-      }
-    }
-  }
 }
 
 // Applications (documentations)
 
 section#applications {
-  //@extend .container;
-  padding: 1.5em 1em 1em;
-  //margin: 0 -1.5em;
+    //@extend .container;
+    padding: 1.5em 1em 1em;
+    //margin: 0 -1.5em;
 
-  article {
-    @include clearfix();
-    border-bottom:1px solid #CCC;
-    padding: 1.4em 0;
-    font-size: 1em;
-
-    &:last-child {
-      border-bottom:0 none;
-    }
-
-    span.version {
-      height: auto;
-      font-weight: bold;
-      font-size: 11px;
-    }
-    div.title, div.download, div.javadoc, div.reference {
-      float: left;
-    }
-    div.title {
-      width: 35%;
-
-      h1 {
-        font-size: 1.5em;
-        color: $text-color;
-        font-weight: bold;
-        margin: 0;
-
-        a {
-          color: $text-color;
-          &:hover {
-            color: $primary;
-          }
-        }
-      }
-      p {
+    article {
+        @include clearfix();
+        border-bottom: 1px solid #CCC;
+        padding: 1.4em 0;
         font-size: 1em;
-        margin: 0;
-      }
-    }
-    div.version {
-      line-height: 20px;
-      padding: 3px 0;
-    }
-    div.github {
-      float: left;
-      width: 15%;
-      a {
-        text-align: center;
-        display: block;
-        width: 100px;
-        padding: 5px 0;
-        margin: 0 auto;
-        color: $text-color;
-        span.fa {
-          display: block;
-          text-align: center;
-          font-size:  26px;
+
+        &:last-child {
+            border-bottom: 0 none;
         }
-        &:hover {
-          text-decoration: none;
-          color: $primary;
+
+        span.version {
+            height: auto;
+            font-weight: bold;
+            font-size: 11px;
         }
-      }
+
+        div.title, div.download, div.javadoc, div.reference {
+            float: left;
+        }
+
+        div.title {
+            width: 35%;
+
+            h1 {
+                font-size: 1.5em;
+                color: $text-color;
+                font-weight: bold;
+                margin: 0;
+
+                a {
+                    color: $text-color;
+
+                    &:hover {
+                        color: $primary;
+                    }
+                }
+            }
+
+            p {
+                font-size: 1em;
+                margin: 0;
+            }
+        }
+
+        div.version {
+            line-height: 20px;
+            padding: 3px 0;
+        }
+
+        div.github {
+            float: left;
+            width: 15%;
+
+            a {
+                text-align: center;
+                display: block;
+                width: 100px;
+                padding: 5px 0;
+                margin: 0 auto;
+                color: $text-color;
+
+                span.fa {
+                    display: block;
+                    text-align: center;
+                    font-size: 26px;
+                }
+
+                &:hover {
+                    text-decoration: none;
+                    color: $primary;
+                }
+            }
+        }
+
+        div.download {
+            width: 15%;
+            text-align: center;
+            padding-top: 5px;
+        }
+
+        div.javadoc {
+            width: 15%;
+            text-align: center;
+            padding-top: 5px;
+        }
+
+        div.reference {
+            width: 15%;
+            text-align: center;
+            padding-top: 5px;
+        }
     }
-    div.download {
-      width: 15%;
-      text-align: center;
-      padding-top: 5px;
-    }
-    div.javadoc {
-      width: 15%;
-      text-align: center;
-      padding-top: 5px;
-    }
-    div.reference {
-      width: 15%;
-      text-align: center;
-      padding-top: 5px;
-    }
-  }
 
 }
 
 span.logo-lettuce {
-  display: block;
-  margin: 0 auto;
-  width: 110px;
-  height: 110px;
-  background: url('../img/lettuce-white-text-4x.png') no-repeat 5px 0;
-  background-size: 431px 110px;
-  opacity: 1;
+    display: block;
+    margin: 0 auto;
+    width: 110px;
+    height: 110px;
+    background: url('../img/lettuce-white-text-4x.png') no-repeat 5px 0;
+    background-size: 431px 110px;
+    opacity: 1;
 }
 
 span.logo-java8 {
-  display: block;
-  margin: 0 auto;
-  width: 110px;
-  height: 110px;
-  background: url('../img/java8.png') no-repeat 0 0;
-  opacity: 1;
-  background-size: 110px 110px;
+    display: block;
+    margin: 0 auto;
+    width: 110px;
+    height: 110px;
+    background: url('../img/java8.png') no-repeat 0 0;
+    opacity: 1;
+    background-size: 110px 110px;
 }
 
 span.logo-io {
-  display: block;
-  margin: 0 auto;
-  width: 132px;
-  height: 100px;
-  background: url('../img/io.png') no-repeat 0 0;
-  background-size: 132px 100px;
+    display: block;
+    margin: 0 auto;
+    width: 132px;
+    height: 100px;
+    background: url('../img/io.png') no-repeat 0 0;
+    background-size: 132px 100px;
 }
 
 span.logo-lettuce-transparent, span.logo-lettuce-head-transparent {
-  display: block;
-  margin: 0 auto;
-  background: url('../img/lettuce-white-text-4x.png') no-repeat 0 0;
-  opacity: 0.7;
+    display: block;
+    margin: 0 auto;
+    background: url('../img/lettuce-white-text-4x.png') no-repeat 0 0;
+    opacity: 0.7;
 }
 
 span.logo-lettuce-head-transparent {
-  width: 213px;
-  height: 225px;
-  background-size: 863px 213px;
+    width: 213px;
+    height: 225px;
+    background-size: 863px 213px;
 }
 
 section#key-features {
-  article {
-    border-top: 1px solid #CCC;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 28px;
-    &:first-child {
-      border-top: 0 none;
-    }
-    div {
-      max-width: 650px;
-      margin: 0 auto;
-      padding: 3.5em 0 4em;
-      padding-right: 350px;
-      padding-left: 20px;
-      position: relative;
-    }
-    h1 {
-      font-family: $header-font;
-      font-size: 30px;
-      line-height: 30px;
-      font-weight: 400;
-    }
-    span.icon {
-      position: absolute;
-      top: 70px;
-      right: 10px;
+    article {
+        border-top: 1px solid #CCC;
+        font-weight: 400;
+        font-size: 16px;
+        line-height: 28px;
 
-    }
-    &.clustering {
-      div {
-        background: url('../img/turbomessage-bg.jpg') no-repeat right 20px;
-        background-size: 446px 353px;
-      }
-      span.icon {
-        display: block;
-        width: 202px;
-        height: 100px;
-        top: 100px;
-        right: 100px;
-        background: url('../img/cluster.png') no-repeat right center;
-        background-size: 202px 100px;
-      }
+        &:first-child {
+            border-top: 0 none;
+        }
 
-    }
-    &.dynamic-api {
-      background: white;
-      div {
-        padding-right: 20px;
-        padding-left: 350px;
-        text-align: right;
-        background: url('../img/module.png') no-repeat 80px center;
-        background-size: 128px 128px;
-      }
-    }
-    &.cloud-ready {
-      div {
-        background: url('../img/cloud-ready-bg.jpg') no-repeat right center;
-        background-size: 520px 309px;
-      }
+        div.content {
+            max-width: 550px;
+        }
 
-      span.icon {
-        display: block;
-        width: 170px;
-        height: 170px;
-        top: 40px;
-        right: 40px;
-        background: url('../img/cloud-ready.png') no-repeat right center;
-        background-size: 170px 170px;
-      }
-    }
-    &.use-lettuce {
-      background-color: white;
-      padding: 2em 0;
-      div {
-        padding: 0;
-        text-align: center;
-        width: auto;
-        max-width: 1000px;
-        margin: 0 auto;
+        div.content, div.content-continue {
+            margin: 0 auto;
+            padding: 3.5em 0 4em;
+            padding-right: 350px;
+            padding-left: 20px;
+            position: relative;
+        }
+
         h1 {
-          margin: 0;
-          padding: 0;
-          font-size: 14px;
-          font-weight: bold;
-          padding-bottom: 0.5em;
+            font-family: $header-font;
+            font-size: 30px;
+            line-height: 30px;
+            font-weight: 400;
         }
-        p {
-          padding: 0;
-          margin: 0;
+
+        span.icon {
+            position: absolute;
+            top: 70px;
+            right: 10px;
         }
-        a {
-          padding: 0 10px;
+
+        &.intro {
+            background: white;
+
+            div.content {
+                padding-right: 20px;
+                padding-left: 350px;
+                padding-bottom: 0;
+                text-align: right;
+                background: url('../img/api.png') no-repeat 1em 5em;
+                background-size: 128px 128px;
+            }
+
+            div.content-continue {
+                padding: 0 20px 2em 200px;
+                text-align: right;
+                max-width: 700px;
+            }
         }
-      }
+
+        &.clustering {
+            div.content {
+                background: url('../img/turbomessage-bg.jpg') no-repeat right 4em;
+                background-size: 446px 353px;
+            }
+
+            span.icon {
+                display: block;
+                width: 202px;
+                height: 120px;
+                top: 100px;
+                right: 100px;
+                background: url('../img/cluster.png') no-repeat right 1em;
+                background-size: 202px 100px;
+            }
+        }
+
+        &.dynamic-api {
+            background: white;
+
+            div.content {
+                padding-right: 20px;
+                padding-left: 350px;
+                text-align: right;
+                background: url('../img/module.png') no-repeat 1em 5em;
+                background-size: 128px 128px;
+            }
+        }
+
+        &.cloud-ready {
+            div.content {
+                background: url('../img/cloud-ready-bg.jpg') no-repeat right 1em;
+                background-size: 520px 309px;
+            }
+
+            span.icon {
+                display: block;
+                width: 170px;
+                height: 190px;
+                top: 40px;
+                right: 40px;
+                background: url('../img/cloud-ready.png') no-repeat right 1em;
+                background-size: 170px 170px;
+            }
+        }
+
+        &.use-lettuce {
+            background-color: white;
+            padding: 2em 0;
+
+            div {
+                padding: 0;
+                text-align: center;
+                width: auto;
+                max-width: 1000px;
+                margin: 0 auto;
+
+                h1 {
+                    margin: 0;
+                    padding: 0;
+                    font-size: 14px;
+                    font-weight: bold;
+                    padding-bottom: 0.5em;
+                }
+
+                p {
+                    padding: 0;
+                    margin: 0;
+                }
+
+                a {
+                    padding: 0 10px;
+                }
+            }
+        }
     }
-  }
 }
 
 section#brands {
-  background: $primary;
-  color: white;
-  padding: 3.5em 0 5em;
-  div.row {
-    @extend .container;
-    @include clearfix();
-  }
-  article {
-    float: left;
-    width: 33%;
-    text-align: center;
-    span.version {
-      display: none;
-    }
-    a {
-      color: white;
-    }
-    p {
-      margin: 0;
-      padding: 0 2em;
-      font-size: 1.1em;
-    }
-    h1 {
-      text-transform: uppercase;
-      font-family: $header-font;
-      font-weight: 400;
-      line-height: 20px;
-      font-size: 25px;
+    background: $primary;
+    color: white;
+    padding: 3.5em 0 5em;
 
+    div.row {
+        @extend .container;
+        @include clearfix();
     }
-    span.icon {
-      display: block;
-      height: 100px;
-      text-align: center;
-      margin-bottom: 30px;
-      position: relative;
+
+    article {
+        float: left;
+        width: 33%;
+        text-align: center;
+
+        span.version {
+            display: none;
+        }
+
+        a {
+            color: white;
+        }
+
+        p {
+            margin: 0;
+            padding: 0 2em;
+            font-size: 1.1em;
+        }
+
+        h1 {
+            text-transform: uppercase;
+            font-family: $header-font;
+            font-weight: 400;
+            line-height: 20px;
+            font-size: 25px;
+
+        }
+
+        span.icon {
+            display: block;
+            height: 100px;
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
     }
-  }
 }
 
 section.page404 {
-  @extend .container;
-  @include clearfix();
-  text-align: center;
-  padding: 5em 0;
-  h1 {
-    font-size: 20px;
-    font-weight: normal;
+    @extend .container;
+    @include clearfix();
     text-align: center;
-    font-family: $header-font;
-  }
-  ul {
-    margin: 0;
-    padding: 0;
-    li {
-      margin: 0;
-      padding: 0.2em 0;
-      list-style: none;
-      list-style-type: none;
+    padding: 5em 0;
+
+    h1 {
+        font-size: 20px;
+        font-weight: normal;
+        text-align: center;
+        font-family: $header-font;
     }
-  }
+
+    ul {
+        margin: 0;
+        padding: 0;
+
+        li {
+            margin: 0;
+            padding: 0.2em 0;
+            list-style: none;
+            list-style-type: none;
+        }
+    }
 }
 
 .page-summary {
-  background: #dedede;
-  margin-bottom: 0.5em;
-  .page-summary-content {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 3em 0;
-    .page-summary-wrap {
-      padding-left: 2em;
-      padding-right: 2em;
-    }
-    h1 {
-      position: relative;
-      max-width: 700px;
-      margin: 0;
-      font-size: 1.5em;
-      color: $text-color;
-      font-weight:bold;
-      a.link-github {
-        color: $text-color;
-        margin-left: 10px;
-        span.fa {
-          font-size:  26px;
+    background: #dedede;
+    margin-bottom: 0.5em;
+
+    .page-summary-content {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 3em 0;
+
+        .page-summary-wrap {
+            padding-left: 2em;
+            padding-right: 2em;
         }
-        &:hover {
-          text-decoration: none;
-          color: $primary;
+
+        h1 {
+            position: relative;
+            max-width: 700px;
+            margin: 0;
+            font-size: 1.5em;
+            color: $text-color;
+            font-weight: bold;
+
+            a.link-github {
+                color: $text-color;
+                margin-left: 10px;
+
+                span.fa {
+                    font-size: 26px;
+                }
+
+                &:hover {
+                    text-decoration: none;
+                    color: $primary;
+                }
+            }
         }
-      }
+
+        div.details {
+            max-width: 700px;
+            padding: 0.4em 0 0 0;
+        }
     }
-    div.details {
-      max-width: 700px;
-      padding: 0.4em 0 0 0;
-    }
-  }
 }
 
 .project {
-  .project-content {
-    padding: 0 2em;
-    p, ul {
-      font-size: 0.9em;
+    .project-content {
+        padding: 0 2em;
+
+        p, ul {
+            font-size: 0.9em;
+        }
     }
-  }
-  h1 {
-    font-size: 1.2em;
-    color: $text-color;
-  }
-  .project-row {
-    padding: 1.5em 0 3em;
-    @include clearfix();
-    .project-col-left {
-      float: left;
-      width: 65%;
+
+    h1 {
+        font-size: 1.2em;
+        color: $text-color;
     }
-    .project-col-right {
-      float: right;
-      width: 30%;
-      padding-top: 2em;
+
+    .project-row {
+        padding: 1.5em 0 3em;
+        @include clearfix();
+
+        .project-col-left {
+            float: left;
+            width: 65%;
+        }
+
+        .project-col-right {
+            float: right;
+            width: 30%;
+            padding-top: 2em;
+        }
     }
-  }
 }
 
 div.panel {
-  border: 1px solid $text-color;
-  font-size: 0.9rem;
-  background-color: #f5f5f5;
-  .panel-title {
-    border-bottom: 1px solid $text-color;
-    padding: 1em 1em;
-    font-weight:bold;
-  }
-  .panel-content {
-    padding: 1em;
-    .table-2 {
-      background-color: #f5f5f5;
-      tr:nth-of-type(even), tr:nth-of-type(odd) {
-        background-color: #f5f5f5;
-      }
+    border: 1px solid $text-color;
+    font-size: 0.9rem;
+    background-color: #f5f5f5;
+
+    .panel-title {
+        border-bottom: 1px solid $text-color;
+        padding: 1em 1em;
+        font-weight: bold;
     }
-  }
+
+    .panel-content {
+        padding: 1em;
+
+        .table-2 {
+            background-color: #f5f5f5;
+
+            tr:nth-of-type(even), tr:nth-of-type(odd) {
+                background-color: #f5f5f5;
+            }
+        }
+    }
 }
 
 table.table-2 {
-  width: 100%;
-  margin: 0;
-  border: 0 none;
-  thead {
+    width: 100%;
+    margin: 0;
+    border: 0 none;
+
+    thead {
+        tr {
+            th {
+                font-size: 0.8em;
+            }
+        }
+    }
+
+    tr:nth-of-type(even), tr:nth-of-type(odd) {
+        background: #f1f1f1;
+    }
+
     tr {
-      th {
-        font-size: 0.8em;
-      }
+        border-bottom: 1px solid #CCC;
+
+        &:last-child {
+            border-bottom: 0 none;
+        }
     }
-  }
-  tr:nth-of-type(even), tr:nth-of-type(odd) {
-    background: #f1f1f1;
-  }
-  tr {
-    border-bottom: 1px solid #CCC;
-    &:last-child {
-      border-bottom: 0 none;
-    }
-  }
 }
 
 .code {
-  margin: 0.5em 0 1em;
-  border: 1px solid #CCC;
-  background-color: #f5f5f5;
-  padding: 1em;
-  font-size: 13px;
+    margin: 0.5em 0 1em;
+    border: 1px solid #CCC;
+    background-color: #f5f5f5;
+    padding: 1em;
+    font-size: 13px;
 }
 
 ul.nav-options {
-  margin: 0;
-  padding: 0.5rem 0 0 0;
-  @include clearfix();
-  li {
-    float: left;
-    list-style: none;
-    .btn {
-      border-radius:0;
+    margin: 0;
+    padding: 0.5rem 0 0 0;
+    @include clearfix();
+
+    li {
+        float: left;
+        list-style: none;
+
+        .btn {
+            border-radius: 0;
+        }
+
+        &:first-child {
+            .btn {
+                border-radius: 4px 0 0 4px;
+            }
+        }
+
+        &:last-child {
+            .btn {
+                border-radius: 0 4px 4px 0;
+            }
+        }
     }
-    &:first-child {
-      .btn {
-        border-radius: 4px 0 0 4px;
-      }
-    }
-    &:last-child {
-      .btn {
-        border-radius: 0 4px 4px 0;
-      }
-    }
-  }
 }
 
