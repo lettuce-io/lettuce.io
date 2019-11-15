@@ -25,7 +25,6 @@ buildscript {
     dependencies {
         classpath("com.github.jengelman.gradle.plugins:shadow:2.0.3")
         classpath("com.github.robfletcher:compass-gradle-plugin:2.0.6")
-        classpath("io.projectreactor.ipc:reactor-netty:0.7.4.RELEASE")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
         classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
     }
@@ -99,13 +98,13 @@ dependencies {
     }
     compile("io.projectreactor:reactor-core:3.2.0.RELEASE")
 
-    compile("io.lettuce:lettuce-core:5.1.0.RELEASE") {
+    compile("io.lettuce:lettuce-core:5.2.1.RELEASE") {
         exclude(group = "io.netty")
     }
 
     compile("org.thymeleaf:thymeleaf:3.0.9.RELEASE")
-    compile("com.fasterxml.jackson.core:jackson-databind:2.9.7")
-    compile("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.7")
+    compile("com.fasterxml.jackson.core:jackson-databind:2.10.1")
+    compile("com.fasterxml.jackson.module:jackson-module-kotlin:2.10.1")
     compile("org.slf4j:slf4j-api:1.7.25")
     runtime("commons-logging:commons-logging:1.2")
     runtime("ch.qos.logback:logback-classic:1.1.7")
