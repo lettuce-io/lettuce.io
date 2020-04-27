@@ -30,6 +30,7 @@ data class Artifact(
         val classifier: Classifier,
         val description: String,
         val ghBranch: String,
+        val pinnedVersion: Boolean = false,
         val deprecated: Boolean = false,
         val reference: Boolean = false,
         val wiki: Boolean = false) {
@@ -44,9 +45,19 @@ enum class Classifier {
 data class Module(val name: String,
                   val groupId: String,
                   val artifactId: String,
-                  val branch: String,
+                  val branches: List<String>,
                   val ga: String,
-                  val milestone: String)
+                  val milestone: String) {
+
+    fun branchText(): String {
+
+        if (branches.size == 1) {
+            return branches.get(0)
+        }
+
+        return branches.joinToString("/")
+    }
+}
 
 /**
  * @author Mark Paluch
@@ -151,7 +162,7 @@ class Versions(val versions: List<Version>) {
             val milestone = Pattern.compile(String.format("(%s)(\\d+)?", milestonePattern))
 
             val versions = meta.versioning!!.versions
-                    .filter { identifier -> identifier.startsWith(module.branch) }.map { identifier ->
+                    .filter { matchesBranch(it, module.branches) }.map { identifier ->
 
                         var classifier = Classifier.Release
 
@@ -165,6 +176,17 @@ class Versions(val versions: List<Version>) {
                     }.reversed()
 
             return Versions(versions)
+        }
+
+        private fun matchesBranch(it: String, branches: List<String>): Boolean {
+
+            for (branch in branches) {
+                if (it.startsWith(branch)) {
+                    return true;
+                }
+            }
+
+            return false
         }
     }
 }
@@ -180,6 +202,10 @@ class Version(val version: String,
         return if (major != 0) major else this.version.compareTo(o.version)
     }
 
+    override fun toString(): String {
+        return "Version(version='$version', classifier=$classifier, major=$major)"
+    }
+
     companion object {
 
         fun create(version: String, classifier: Classifier): Version {
@@ -193,6 +219,7 @@ class Version(val version: String,
             return Version(version, classifier, major)
         }
     }
+
 
 }
 

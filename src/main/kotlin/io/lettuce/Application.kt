@@ -169,8 +169,8 @@ class Application {
         val artifacts = Flux.fromIterable(this.artifacts).flatMapSequential { it ->
 
             val module = modules[it.module]!!
-            val versions = getVersionsMono(module, Classifier.Release, false)
-            versions.map<Version> { v -> v.getLatest(Classifier.Release) }.map { v ->
+            val versions = getVersionsMono(module, it.classifier, false)
+            versions.map<Version> { v -> v.getLatest(it.classifier) }.map { v ->
                 DocumentedArtifact(it, module, v)
             }
         }.collectList()
@@ -547,7 +547,7 @@ class Application {
 
             if (artifactVersion.classifier == Classifier.Release || artifactVersion.classifier == Classifier.Milestone) {
 
-                if (module.branch == "3" || module.branch == "4") {
+                if (module.branches.contains("3") || module.branches.contains("4")) {
                     return "https://github.com/lettuce-io/lettuce-core/releases/download/${artifactVersion.version}/lettuce-${artifactVersion.version}-bin.zip"
                 }
                 return "https://github.com/lettuce-io/lettuce-core/releases/download/${artifactVersion.version}/lettuce-core-${artifactVersion.version}-bin.zip"

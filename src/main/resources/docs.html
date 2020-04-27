@@ -87,8 +87,12 @@
 
                                 <a th:href="'https://search.maven.org/artifact/'+${item.module.groupId}+'/'+${item.module.artifactId}+'/'+${item.version.version}"
                                    class="version"><span class="version" th:text="${item.version.version}"/></a>
-                                <span class="version" th:text="${item.version.classifier.name}"
-                                      th:if="${not item.artifact.deprecated}"></span>
+
+                                <span
+                                      th:if="${not item.artifact.deprecated}"
+                                      th:class="${item.version.classifier.name == 'Release'}? 'version stable' : 'version milestone'"
+                                      th:text="${item.version.classifier.name == 'Release'}? 'Stable' : ${item.version.classifier.name}"/>
+
                                 <span class="version deprecated"
                                       th:if="${item.artifact.deprecated}">Out of Maintenance</span>
                             </div>
@@ -102,17 +106,28 @@
                         </div>
                         <div class="download">
                             <strong>Download</strong><br/>
-                            <a th:href="'/'+${item.artifact.module}+'/release/download'">Release Bundle</a>
+                            <a th:if="${!item.artifact.pinnedVersion}"
+                               th:href="'/'+${item.artifact.module}+'/release/download'">Bundle</a>
+                            <a th:if="${item.artifact.pinnedVersion}"
+                               th:href="'/'+${item.artifact.module}+'/'+${item.version.version}+'/download'">Release
+                                Bundle</a>
                         </div>
                         <div class="javadoc">
                             <strong>Javadoc</strong><br/>
+                            <a th:if="${item.artifact.pinnedVersion}"
+                               th:href="'/'+${item.artifact.module}+'/'+${item.version.version}+'/api'">Milestone</a>
+                            <span th:if="${!item.artifact.pinnedVersion}">
                             <a th:href="'/'+${item.artifact.module}+'/release/api'">Release</a> |
                             <a th:href="'/'+${item.artifact.module}+'/snapshot/api'">Snapshot</a>
+                                </span>
                         </div>
                         <div class="reference">
                             <strong>Reference</strong><br/>
+                            <a th:href="'/'+${item.artifact.module}+'/'+${item.version.version}+'/reference'"
+                               th:if="${item.artifact.reference && item.artifact.pinnedVersion}">Milestone</a> <span
+                                th:if="${item.artifact.referenceAndWiki}">
                             <a th:href="'/'+${item.artifact.module}+'/release/reference'"
-                               th:if="${item.artifact.reference}">Release</a> <span
+                               th:if="${item.artifact.reference && !item.artifact.pinnedVersion}">Release</a> <span
                                 th:if="${item.artifact.referenceAndWiki}">|</span> <a
                                 href="https://github.com/lettuce-io/lettuce-core/wiki" th:if="${item.artifact.wiki}">Wiki</a>
                         </div>
@@ -164,21 +179,25 @@
 <script src="/assets/js/app.js"></script>
 <!-- Piwik -->
 <script type="text/javascript">
-  var _paq = _paq || [];
-  // tracker methods like "setCustomDimension" should be called before "trackPageView"
-  _paq.push(["setCookieDomain", "*.lettuce.io"]);
-  _paq.push(['setDomains', ['*.lettuce.io', 'lettuce.io']]);
-  _paq.push(['trackPageView']);
-  _paq.push(['enableLinkTracking']);
-  (function() {
-    var u="//piwik.paluch.biz/";
-    _paq.push(['setTrackerUrl', u+'piwik.php']);
-    _paq.push(['setSiteId', '6']);
-    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
-  })();
+    var _paq = _paq || [];
+    // tracker methods like "setCustomDimension" should be called before "trackPageView"
+    _paq.push(["setCookieDomain", "*.lettuce.io"]);
+    _paq.push(['setDomains', ['*.lettuce.io', 'lettuce.io']]);
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    (function () {
+        var u = "//piwik.paluch.biz/";
+        _paq.push(['setTrackerUrl', u + 'piwik.php']);
+        _paq.push(['setSiteId', '6']);
+        var d = document, g = d.createElement('script'), s = d.getElementsByTagName('script')[0];
+        g.type = 'text/javascript';
+        g.async = true;
+        g.defer = true;
+        g.src = u + 'piwik.js';
+        s.parentNode.insertBefore(g, s);
+    })();
 </script>
-<noscript><p><img src="//piwik.paluch.biz/piwik.php?idsite=6&rec=1" style="border:0;" alt="" /></p></noscript>
+<noscript><p><img src="//piwik.paluch.biz/piwik.php?idsite=6&rec=1" style="border:0;" alt=""/></p></noscript>
 <!-- End Piwik Code -->
 </body>
 </html>

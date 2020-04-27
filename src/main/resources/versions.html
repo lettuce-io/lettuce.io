@@ -65,7 +65,7 @@
             <div class="page-summary">
                 <div class="page-summary-content">
                     <div class="page-summary-wrap">
-                        <h1>Lettuce <span th:text="${module.branch}"/></h1>
+                        <h1>Lettuce <span th:text="${module.branchText}"/></h1>
                         <div class="details">
                         <span id="author" class="author">Lettuce reference
                             documentation and Javadoc.</span><br>
@@ -83,16 +83,16 @@
                             <h1>Lettuce <span th:text="${version.version}"/></h1>
                             <div class="version">
                                 <span class="version" th:text="${version.version}"/>
-                                <span class="version"
-                                      th:class="${version.classifier.name == 'Release'}? 'stable' : 'milestone'"
-                                      th:text="${version.classifier.name == 'Release'}? 'Stable' : ${version.classifier.name}"/>
+                                <span
+                                        th:class="${version.classifier.name == 'Release'}? 'version stable' : 'version milestone'"
+                                        th:text="${version.classifier.name == 'Release'}? 'Stable' : ${version.classifier.name}"/>
                             </div>
                         </div>
                         <div class="download">
-                            <a th:href="'/'+${module.artifactId}+'/'+${version.version}+'/download'">Download</a>
+                            <a th:href="'/'+${module.name}+'/'+${version.version}+'/download'">Download</a>
                         </div>
                         <div class="javadoc">
-                            <a th:href="'/'+${module.artifactId}+'/'+${version.version}+'/api'">Javadoc</a>
+                            <a th:href="'/'+${module.name}+'/'+${version.version}+'/api'">Javadoc</a>
                         </div>
                     </article>
                 </section>

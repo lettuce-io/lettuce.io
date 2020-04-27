@@ -3,7 +3,9 @@
     "name": "lettuce-3",
     "groupId": "biz.paluch.redis",
     "artifactId": "lettuce",
-    "branch": 3,
+    "branches": [
+      3
+    ],
     "ga": "Final",
     "milestone": "Beta"
   },
@@ -11,7 +13,9 @@
     "name": "lettuce-4",
     "groupId": "biz.paluch.redis",
     "artifactId": "lettuce",
-    "branch": 4,
+    "branches": [
+      4
+    ],
     "ga": "Final",
     "milestone": "Beta"
   },
@@ -19,7 +23,10 @@
     "name": "core",
     "groupId": "io.lettuce",
     "artifactId": "lettuce-core",
-    "branch": 5,
+    "branches": [
+      5,
+      6
+    ],
     "ga": "RELEASE",
     "milestone": "M, RC"
   }
