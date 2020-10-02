@@ -115,7 +115,7 @@
                         <div class="javadoc">
                             <strong>Javadoc</strong><br/>
                             <a th:if="${item.artifact.pinnedVersion}"
-                               th:href="'/'+${item.artifact.module}+'/'+${item.version.version}+'/api'">Milestone</a>
+                               th:href="'/'+${item.artifact.module}+'/'+${item.version.version}+'/api'">Release</a>
                             <span th:if="${!item.artifact.pinnedVersion}">
                             <a th:href="'/'+${item.artifact.module}+'/release/api'">Release</a> |
                             <a th:href="'/'+${item.artifact.module}+'/snapshot/api'">Snapshot</a>
@@ -124,7 +124,7 @@
                         <div class="reference">
                             <strong>Reference</strong><br/>
                             <a th:href="'/'+${item.artifact.module}+'/'+${item.version.version}+'/reference'"
-                               th:if="${item.artifact.reference && item.artifact.pinnedVersion}">Milestone</a> <span
+                               th:if="${item.artifact.reference && item.artifact.pinnedVersion}">Release</a> <span
                                 th:if="${item.artifact.referenceAndWiki}">
                             <a th:href="'/'+${item.artifact.module}+'/release/reference'"
                                th:if="${item.artifact.reference && !item.artifact.pinnedVersion}">Release</a> <span
@@ -142,8 +142,8 @@
                                 <li class="heading">Documentation</li>
                                 <li><a href="/lettuce-3/release/api/">Lettuce 3.x</a></li>
                                 <li><a href="/lettuce-4/release/api/">Lettuce 4.x</a></li>
-                                <li><a href="/core/release/api/">Lettuce 5.x</a></li>
-                                <li><a href="/core/release/reference/">Lettuce 5.x Reference</a></li>
+                                <li><a href="/core/release/api/">Lettuce 6.x</a></li>
+                                <li><a href="/core/release/reference/">Lettuce 6.x Reference</a></li>
                             </ul>
                         </nav>
                         <nav>

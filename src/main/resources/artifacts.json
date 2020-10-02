@@ -2,10 +2,9 @@
   {
     "label": "Lettuce 6.0.0",
     "module": "core",
-    "classifier": "Milestone",
+    "classifier": "Release",
     "description": "Lettuce Redis Client",
     "ghBranch": "https://github.com/lettuce-io/lettuce-core",
-    "pinnedVersion": true,
     "reference": true,
     "wiki": true
   },
@@ -15,6 +14,8 @@
     "classifier": "Release",
     "description": "Lettuce Redis Client",
     "ghBranch": "https://github.com/lettuce-io/lettuce-core/tree/5.3.x",
+    "pinnedVersion": true,
+    "versionPrefix": "5.",
     "reference": true,
     "wiki": true
   },
@@ -24,6 +25,7 @@
     "classifier": "Release",
     "description": "Lettuce Redis Client",
     "ghBranch": "https://github.com/lettuce-io/lettuce-core/tree/4.x",
+    "deprecated": true,
     "reference": false,
     "wiki": true
   },

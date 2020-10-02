@@ -31,6 +31,7 @@ data class Artifact(
         val description: String,
         val ghBranch: String,
         val pinnedVersion: Boolean = false,
+        val versionPrefix: String = "",
         val deprecated: Boolean = false,
         val reference: Boolean = false,
         val wiki: Boolean = false) {
@@ -145,9 +146,10 @@ class Versions(val versions: List<Version>) {
         return Versions(result.reversed())
     }
 
-    fun getLatest(versionType: Classifier): Version? {
-        return versions.stream().filter { version -> version.classifier == versionType }.findFirst().orElse(null)
+    fun getLatest(versionType: Classifier, prefix : String = ""): Version? {
+        return versions.stream().filter { version -> version.classifier == versionType }.filter { version -> prefix.isEmpty() || version.version.startsWith(prefix) }.findFirst().orElse(null)
     }
+
 
     fun getVersion(version: String): Version? {
         return versions.stream().filter { v -> v.version == version }.findFirst().orElse(null)

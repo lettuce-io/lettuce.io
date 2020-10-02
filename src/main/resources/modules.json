@@ -24,8 +24,7 @@
     "groupId": "io.lettuce",
     "artifactId": "lettuce-core",
     "branches": [
-      5,
-      6
+      5, 6
     ],
     "ga": "RELEASE",
     "milestone": "M, RC"

@@ -50,6 +50,7 @@ import java.lang.management.ManagementFactory
 import java.net.URI
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
+import java.nio.file.Paths
 import java.time.Duration
 import java.util.*
 import java.util.function.BiFunction
@@ -170,7 +171,10 @@ class Application {
 
             val module = modules[it.module]!!
             val versions = getVersionsMono(module, it.classifier, false)
-            versions.map<Version> { v -> v.getLatest(it.classifier) }.map { v ->
+            val versionPrefix =
+                    if (it.pinnedVersion) it.versionPrefix
+                    else ""
+            versions.map<Version> { v -> v.getLatest(it.classifier, versionPrefix) }.map { v ->
                 DocumentedArtifact(it, module, v)
             }
         }.collectList()
@@ -225,7 +229,7 @@ class Application {
                                     resp.status(200).header(HttpHeaderNames.CONTENT_TYPE, contentType)
 
                                     if (pinnedVersion) {
-                                        resp.header(HttpHeaderNames.CACHE_CONTROL, cacheControl(CLIENT_CACHE_ASSETS))
+                                        resp.header(HttpHeaderNames.CACHE_CONTROL, cacheControl(CLIENT_CACHE_2DAYS))
                                     } else {
                                         resp.header(HttpHeaderNames.CACHE_CONTROL, cacheControl(CLIENT_CACHE_DOCS))
                                     }
@@ -331,6 +335,15 @@ class Application {
 
             return resp.header(HttpHeaderNames.CONTENT_TYPE, contentType)
                     .header(HttpHeaderNames.CACHE_CONTROL, cacheControl(CLIENT_CACHE_ASSETS)).sendFile(p)
+        }
+
+        val resource = javaClass.classLoader.getResource("static/$prefix")
+
+        if(resource != null){
+            val contentType = fileTypeMap.getContentType(p.toString())
+
+            return resp.header(HttpHeaderNames.CONTENT_TYPE, contentType)
+                    .header(HttpHeaderNames.CACHE_CONTROL, cacheControl(CLIENT_CACHE_ASSETS)).sendFile(Paths.get(resource.toURI()))
         }
 
         return resp.sendNotFound()
@@ -496,6 +509,7 @@ class Application {
         val CLIENT_CACHE_INDEX = Duration.ofDays(5)
         val CLIENT_CACHE_DOCS = Duration.ofHours(8)
         val CLIENT_CACHE_ASSETS = Duration.ofDays(30)
+        val CLIENT_CACHE_2DAYS = Duration.ofDays(2)
 
         private fun getFilename(req: HttpServerRequest, moduleRequest: ModuleRequest, module: Module?,
                                 isJavadoc: Boolean, versionType: Classifier?): String {
