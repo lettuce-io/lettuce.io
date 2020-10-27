@@ -1,6 +1,6 @@
 [
   {
-    "label": "Lettuce 6.0.0",
+    "label": "Lettuce 6.0.x",
     "module": "core",
     "classifier": "Release",
     "description": "Lettuce Redis Client",
