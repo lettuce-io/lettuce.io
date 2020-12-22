@@ -9,11 +9,9 @@ buildscript {
 
     repositories {
         mavenLocal()
-        jcenter()
         maven { setUrl("http://dl.bintray.com/robfletcher/gradle-plugins") }
-        maven { setUrl("https://repo.spring.io/release") }
-        maven { setUrl("https://repo.spring.io/snapshot") }
         mavenCentral()
+        jcenter()
     }
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
@@ -66,9 +64,7 @@ configure<CompassExtension> {
 repositories {
     mavenLocal()
     mavenCentral()
-    maven { setUrl("http://repo.spring.io/release") }
-    maven { setUrl("http://repo.spring.io/milestone") }
-    maven { setUrl("https://repo.spring.io/snapshot") }
+    jcenter()
 }
 
 dependencies {
